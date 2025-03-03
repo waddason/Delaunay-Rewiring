@@ -1,0 +1,202 @@
+\documentclass[10pt, aspectratio = 169]{beamer}
+% Use package form https://github.com/tgodfrey0/soton-beamer/tree/main
+% Theme choice
+\usetheme{Soton}
+\usecolortheme{default}
+
+% Title page information
+\title{Machine Learning with graphs - Project Defense}
+\subtitle{Delaunay Graph: Addressing Over-Squashing and Over-Smoothing Using
+Delaunay Triangulation\\
+by Attali et al. \cite{attali2024delaunay}}
+
+\author{Edwin Roussin and Tristan Waddington}
+\supervisor{Supervised by Jhony H. Giraldo}
+\institute{IP-Paris, CEMST}
+\date{26/03/2025}
+
+\setTitleLogoRight{figures/CEMS Terre_nouveau logo792x445px.png}
+% \setTitleLogoCentre{robot.pdf}
+\setTitleLogoLeft{figures/ipparis.png}
+\setLogo{figures/ipparis.png}
+% \setColourScheme{50}{85}{234}
+% \setProgressBarOff
+% \setFrameNumbersOff
+
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Introduction
+\begin{frame}
+    \frametitle{Introduction}
+    \begin{block}{Delayney triangulation}
+    
+    \end{block}
+    
+    \begin{figure}
+        \includegraphics[width=0.6\textwidth]{figures/Delaunay-Rewiring.png}
+        \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+    \end{figure}
+\end{frame}
+
+
+% Automatic Outline slide
+\begin{frame}
+    \frametitle{Outline}
+    \tableofcontents
+\end{frame}
+
+% =====================================
+% Issues with graph rewiring
+% =====================================
+\section{Issues with graph rewiring}
+
+\subsection{Over-Squashing}
+\begin{frame}
+    \frametitle{Over-Squashing}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+        
+        \end{column}
+
+        
+        \begin{column}{0.4\textwidth}
+
+        \end{column}
+    \end{columns}
+
+    Applications already exists on diverse fields such as \textit{graph generation}, 
+    \textit{text-to-sound generation} or \textit{protein design}.
+
+\end{frame}
+
+\subsection{Over-Smoothing}
+\begin{frame}
+    \frametitle{Over-Smoothing}
+    \begin{alertblock}{No access to heavy computing ressources:}
+        Focus on text generation to understand and reproduce the results of authors.
+    \end{alertblock}
+
+    \textbf{2 models in paper}:
+    \begin{itemize}
+        \item \textbf{MD4} (S/L) simple masked diffusion model.
+        \item \textbf{GenMD4} Generalized state-dependent model (more complex).
+
+    \end{itemize}
+\end{frame}
+
+% =====================================
+% Key technical novelty of the paper
+% =====================================
+\section{Key technical novelty of the paper}
+
+\subsection{Theoretical Analysis}
+
+
+
+\begin{frame}
+    \frametitle{Theoretical analysis}
+    \begin{alertblock}{State Dependent Masked Schedule:}
+        \textbf{Idea}: time-dependent probability of masking a token to also dependent on the token value.
+        To be learned by NN.
+
+        \textbf{In practice}: polynomial schedules are described in the paper but on their code, the authors only relies
+        on the cosine masking schedule\footnote{Class MaskingSchedule in 
+        https://github.com/google-deepmind/md4/blob/main/md4/models/diffusion/md4.py}.
+    \end{alertblock}
+\end{frame}
+
+
+% =====================================
+% Experiments
+% =====================================
+\section{Experimental Evaluation}
+\subsection{Methodology}
+\begin{frame}
+    \frametitle{Methodology}
+    Aim  to reproduce as closely as possible the experiments of the authors. 
+    \begin{itemize}
+        \item Get same datasets, and preprocess them.
+        \item Train the models with the same hyperparameters.
+        \item Finally, we evaluate the models with the same metrics.
+    \end{itemize}
+
+        
+\end{frame}
+
+\subsection{Results}
+\begin{frame}
+    \frametitle{Results}
+    \begin{exampleblock}{Text Dataset preparation}
+        \begin{itemize}
+            \item Text8 (English Wikipedia) processed.
+            \item OpenWebText (GPT2 training material) processed in 18 hours.
+            \item train/validation/test split according to experimental methodology.
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{alertblock}{We were unable to run the models}
+        \begin{itemize}
+            \item Training impossible on our machines (size of model).
+            \item Does not work on Colab (tensorflow numpy2 incompatibilities).
+            \item No trained model shared by the authors.
+        \end{itemize}
+    \end{alertblock}
+    
+\end{frame}
+
+\subsection{Discussion}
+\begin{frame}
+    \frametitle{Discussion}
+    \textbf{We faced huge challenges}
+    \begin{itemize}
+        \item Unknown flax framework
+        \item Outdated dependencies in their GitHub
+        \item Huge model size
+        \item No trained model shared
+        \item Students no competent in computer vision at the time.
+    \end{itemize} 
+    
+    \textbf{Future paper that will be explored in the report:}
+    \begin{itemize}
+        \item \textit{Cayley Graph Propagation} by JJ Wilson, Maya 
+        Bechler-Speicher, Petar Veličković \cite{wilson2024cayleygraphpropagation}
+    \end{itemize}
+\end{frame}
+
+% =====================================
+% Conclusion
+% =====================================
+\section{Conclusion}
+\begin{frame}
+    \frametitle{Conclusion}
+    \begin{itemize}
+        \item Cannot confirm the results o
+        \item Not able to reproduce.
+        \item Hard time digging in code and documentation.
+    \end{itemize}
+
+    \begin{block}{Do you have any question?}
+        
+    \end{block}
+\end{frame}
+
+% Automatic bibliography
+\begin{frame}
+    \frametitle{References}
+    \scriptsize
+    \bibliography{references}
+    \bibliographystyle{plain}
+
+\end{frame}
+
+% =====================================
+% Additional slides
+% =====================================
+
+\end{document}
