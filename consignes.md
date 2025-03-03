@@ -19,3 +19,12 @@ In the second section, your task is to **select another research paper** that be
     3. discuss the relation with your first paper.
 
 Academic dishonesty and intellectual laziness, such as relying on LLMs to completely generate your report or the speech of your presentation, will result in penalties. Please note that using LLMs to do light editing of your report is not forbidden.
+
+
+
+
+In graph theory, a clique is a subset of vertices of an undirected graph such that every two distinct vertices in the clique are adjacent. In other words, a clique is a complete subgraph, meaning that there is an edge connecting every pair of vertices within the clique.
+
+For example, in a graph network:
+A 3-clique (or triangle) consists of three vertices, each connected to the other two.
+A 4-clique consists of four vertices, each connected to the other three.
