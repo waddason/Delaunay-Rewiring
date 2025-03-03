@@ -1,0 +1,30 @@
+data/wisconsin/processed/data.pt
+data/wisconsin/processed/pre_filter.pt
+data/wisconsin/processed/pre_transform.pt
+data/wisconsin/raw/out1_graph_edges.txt
+data/wisconsin/raw/out1_node_feature_label.txt
+data/wisconsin/raw/wisconsin_split_0.6_0.2_0.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_1.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_2.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_3.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_4.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_5.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_6.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_7.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_8.npz
+data/wisconsin/raw/wisconsin_split_0.6_0.2_9.npz
+
+# Ignore auxiliary LaTeX files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+
+# Ignore macOS files
+*.DS_Store
