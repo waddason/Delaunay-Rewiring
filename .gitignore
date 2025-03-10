@@ -25,6 +25,10 @@ data/wisconsin/raw/wisconsin_split_0.6_0.2_9.npz
 *.snm
 *.toc
 *.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+defense/Defense_Delaunay.synctex.gz
 
 # Ignore macOS files
 *.DS_Store

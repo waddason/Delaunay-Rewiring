@@ -8,7 +8,7 @@
 \title{Machine Learning with graphs - Project Defense}
 \subtitle{Delaunay Graph: Addressing Over-Squashing and Over-Smoothing Using
 Delaunay Triangulation\\
-by Attali et al. \cite{attali2024delaunay}}
+by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaunay}}}
 
 \author{Edwin Roussin and Tristan Waddington}
 \supervisor{Supervised by Jhony H. Giraldo}
@@ -23,7 +23,6 @@ by Attali et al. \cite{attali2024delaunay}}
 % \setProgressBarOff
 % \setFrameNumbersOff
 
-
 \begin{document}
 
 % Title slide
@@ -34,8 +33,10 @@ by Attali et al. \cite{attali2024delaunay}}
 % Introduction
 \begin{frame}
     \frametitle{Introduction}
-    \begin{block}{Delayney triangulation}
-    
+    \begin{block}{Delauney triangulation}
+    Reconstruct a graph completely from features using the Delaunay triangulation.
+
+    $\Rightarrow$ Avoid over-smoothing and over-squashing.
     \end{block}
     
     \begin{figure}
@@ -59,10 +60,15 @@ by Attali et al. \cite{attali2024delaunay}}
 \subsection{Over-Squashing}
 \begin{frame}
     \frametitle{Over-Squashing}
+    
     \begin{columns}
         \begin{column}{0.4\textwidth}
-        
-        \end{column}
+            \begin{figure}
+                \includegraphics[width=0.99\textwidth]{figures/over_squashing_Girarldo.png}
+                \caption{Illustration of Bottlenecks [Giraldo, Lecture GNNs, 2025]}
+            \end{figure}
+
+        \end{column}    
 
         
         \begin{column}{0.4\textwidth}
@@ -70,24 +76,24 @@ by Attali et al. \cite{attali2024delaunay}}
         \end{column}
     \end{columns}
 
-    Applications already exists on diverse fields such as \textit{graph generation}, 
-    \textit{text-to-sound generation} or \textit{protein design}.
+  
 
 \end{frame}
 
 \subsection{Over-Smoothing}
 \begin{frame}
     \frametitle{Over-Smoothing}
-    \begin{alertblock}{No access to heavy computing ressources:}
-        Focus on text generation to understand and reproduce the results of authors.
+    \textbf{Avoid over-smoothing in preventing the embedding to become the same:}:
+    \begin{itemize}
+        \item \textbf{Normalization} with PairNorm [Zaho, 2020]\cite{zhao2020pairnorm}.
+        \item \textbf{Rewiring} Drop edges, at random [Rong, 2019]\cite{rong2019dropedge} 
+              or in finding the potential good ones [Giraldo, 2023]\cite{Giraldo_2023}
+    \end{itemize}
+
+    \begin{alertblock}{Over-smoothing and over-squashing are intrinsically related}
+        Inevitable trade-off between these two issues, as they cannot be alleviated simultaneously.
     \end{alertblock}
 
-    \textbf{2 models in paper}:
-    \begin{itemize}
-        \item \textbf{MD4} (S/L) simple masked diffusion model.
-        \item \textbf{GenMD4} Generalized state-dependent model (more complex).
-
-    \end{itemize}
 \end{frame}
 
 % =====================================
@@ -101,14 +107,34 @@ by Attali et al. \cite{attali2024delaunay}}
 
 \begin{frame}
     \frametitle{Theoretical analysis}
-    \begin{alertblock}{State Dependent Masked Schedule:}
-        \textbf{Idea}: time-dependent probability of masking a token to also dependent on the token value.
-        To be learned by NN.
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+        \begin{block}{Delaunay rewiring}
+            \begin{itemize}
+                \item Is an extreme 2 steps rewiring method.
+                \item Where all edges are rebuilt during training from a umap embedding to triangles.
+                \item Then mixed with the original edges of the graph.
+            \end{itemize}
+        \end{block}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=0.99\textwidth]{figures/Rewiring_method.png}
+                %\caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+            \end{figure}
+            
+        \end{column}
+    \end{columns}
 
-        \textbf{In practice}: polynomial schedules are described in the paper but on their code, the authors only relies
-        on the cosine masking schedule\footnote{Class MaskingSchedule in 
-        https://github.com/google-deepmind/md4/blob/main/md4/models/diffusion/md4.py}.
-    \end{alertblock}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Theoretical analysis}
+    \begin{figure}
+        \includegraphics[width=0.6\textwidth]{figures/Delaunay-Rewiring.png}
+        \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+    \end{figure}
+
 \end{frame}
 
 
@@ -155,11 +181,7 @@ by Attali et al. \cite{attali2024delaunay}}
     \frametitle{Discussion}
     \textbf{We faced huge challenges}
     \begin{itemize}
-        \item Unknown flax framework
-        \item Outdated dependencies in their GitHub
-        \item Huge model size
-        \item No trained model shared
-        \item Students no competent in computer vision at the time.
+        \item Graphs
     \end{itemize} 
     
     \textbf{Future paper that will be explored in the report:}
