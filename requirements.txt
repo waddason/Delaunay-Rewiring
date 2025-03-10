@@ -1,0 +1,11 @@
+numpy==2.1
+umap-learn
+ml-dtypes
+scikit-learn
+matplotlib
+torch_geometric
+torch
+torchvision
+torchaudio
+GraphRicciCurvature
+pandas
