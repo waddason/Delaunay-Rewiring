@@ -34,14 +34,14 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \begin{frame}
     \frametitle{Introduction}
     \begin{block}{Delauney triangulation}
-    Reconstruct a graph completely from features using the Delaunay triangulation.
+    Reconstruct a graph completely from projected features using the Delaunay triangulation.
 
-    $\Rightarrow$ Avoid over-smoothing and over-squashing.
+    $\Rightarrow$ Avoid \textbf{over-smoothing} and \textbf{over-squashing}.
     \end{block}
     
     \begin{figure}
-        \includegraphics[width=0.6\textwidth]{figures/Delaunay-Rewiring.png}
-        \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+        \includegraphics[width=0.7\textwidth]{figures/Delaunay-Rewiring.png}
+        \caption{Illustration of the Delaunay rewiring \cite[Attali al., 2024]{attali2024delaunay}}
     \end{figure}
 \end{frame}
 
@@ -53,13 +53,13 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \end{frame}
 
 % =====================================
-% Issues with graph rewiring
+% Need of graph rewiring
 % =====================================
-\section{Issues with graph rewiring}
+\section{Need of graph rewiring}
 
 \subsection{Over-Squashing}
 \begin{frame}
-    \frametitle{Over-Squashing}
+    \frametitle{Over-Squashing: inefficient information propagation}
     
     \begin{columns}
         \begin{column}{0.4\textwidth}
@@ -69,29 +69,67 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
             \end{figure}
 
         \end{column}    
+        \begin{column}{0.6\textwidth}
+            GNNs struggle to propagate info to distant nodes: \textbf{bottleneck} 
+            when aggregating messages across a long path \cite[Alon et al., 2021]{alon2021bottleneckgraphneuralnetworks}.
+            
+            Causes \textbf{over-squashing} of exponentially growing info into fixed-size vectors.
+            $\Rightarrow$ \emph{Perform poorly when prediction task depends on long-range interaction.}
 
-        
-        \begin{column}{0.4\textwidth}
-
+            \begin{block}{Vulnerable GNNs}
+                GNC and GIN \emph{absorb incoming edges equally}, more susceptible to over-squashing than GAT and GGNN.
+            \end{block}
+            \begin{block}{Curvature metric}
+                \emph{Discrete Ricci curvature} \cite[Topping et al. 2021]{topping2022understandingoversquashingbottlenecksgraphs} to identify bottlenecks.
+            \end{block}
         \end{column}
     \end{columns}
-
-  
-
 \end{frame}
 
 \subsection{Over-Smoothing}
 \begin{frame}
-    \frametitle{Over-Smoothing}
-    \textbf{Avoid over-smoothing in preventing the embedding to become the same:}:
+    \frametitle{Over-Smoothing: consequence of message passing paradigm}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{block}{Message-passing neural networks (MPNN):}
+                Iterative approach, updating node representations through 
+            the local aggregation of information from neighboring nodes.
+            \end{block}
+            Causes \textbf{over-smoothing} by the need to stack additional layers to capture non-local interactions.
+            Will smooth-out heterophilic graphs.
+            $\Rightarrow$ \emph{Nodes' representations are similar.}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=0.99\textwidth]{figures/over_smoothing.png}
+                \caption{Illustration of Over-smoothing by 
+                \href{https://speakerdeck.com/utf/a-gentle-introduction-to-graph-neural-networks?slide=29}{Alex Ganose}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\subsection{Existing solutions}
+\begin{frame}
+    \frametitle{Existing solutions}
+    \textbf{Identify the quality of the message passing}:
     \begin{itemize}
-        \item \textbf{Normalization} with PairNorm [Zaho, 2020]\cite{zhao2020pairnorm}.
-        \item \textbf{Rewiring} Drop edges, at random [Rong, 2019]\cite{rong2019dropedge} 
-              or in finding the potential good ones [Giraldo, 2023]\cite{Giraldo_2023}
+        \item \textbf{Graph structure analysis} using curvature, but does not scale.
+        \\Highly positive curved edges $\rightarrow$ over-smoothing \cite[Nguyen et al., 2023]{nguyen2023revisiting}.
+        \\Highly negative curved edges $\rightarrow$ over-squashing \cite[Topping et al., 2021]{topping2022understandingoversquashingbottlenecksgraphs}.
+        \item \textbf{Need original graph} but sometimes only features available (NER, documents, ...).
+    \end{itemize}
+
+    \textbf{Avoid over-smoothing in preventing the embedding to become the same}:
+    \begin{itemize}
+        \item \textbf{Normalization} with PairNorm \cite[Zaho, 2020]{zhao2020pairnorm}.
+        \item \textbf{Rewiring} Drop edges, at random \cite[Rong, 2019]{rong2019dropedge} 
+              or in finding the potential good ones \cite[Giraldo, 2023]{Giraldo_2023}
     \end{itemize}
 
     \begin{alertblock}{Over-smoothing and over-squashing are intrinsically related}
         Inevitable trade-off between these two issues, as they cannot be alleviated simultaneously.
+        Quadratic complexity in the number of nodes (or edges).
     \end{alertblock}
 
 \end{frame}
@@ -104,17 +142,19 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \subsection{Theoretical Analysis}
 
 
-
 \begin{frame}
     \frametitle{Theoretical analysis}
     \begin{columns}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.6\textwidth}
         \begin{block}{Delaunay rewiring}
-            \begin{itemize}
-                \item Is an extreme 2 steps rewiring method.
-                \item Where all edges are rebuilt during training from a umap embedding to triangles.
-                \item Then mixed with the original edges of the graph.
-            \end{itemize}
+            Is an extreme \textbf{4 steps rewiring} method.
+            \begin{enumerate}
+                \item First GNN\footnote{GCN from \cite[Kipf and Welling, 2017]{kipf2017semi}} construct \textbf{node embeddings}   .
+                \item Reduce the embedding with \textbf{UMAP} in dim 2.
+                \item \textbf{Rebuilt edges with Delaunay triangulation}.
+                \item Second GNN \textbf{mix with the original features} of the graph.
+            \end{enumerate}
+
         \end{block}
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -122,22 +162,54 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
                 \includegraphics[width=0.99\textwidth]{figures/Rewiring_method.png}
                 %\caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
             \end{figure}
-            
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Initial Thoughts}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Simplicity of the Method}
+                No hyper-parameters = no grid-search. 
+                Complexity of $\mathcal{O} \big( N \log N \big)$
+            \end{block}
+            \begin{block}{Graph creation method}
+                Create a graph from the embedding $\Rightarrow$ no need for the original graph.
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{alertblock}{Umap in 2 dimensions only}
+                Triangulation in higher dimensions $\Rightarrow$ longer time + denser resulting 
+                graphs~\footnote{Generalized triangles in dim=3: have 6 edges, 10 in dim=4} + worse accuracy.
+            \end{alertblock}
+            \begin{alertblock}{First GNN}
+                Embed the initial smoothing and squashing? But needed for quality of 
+                embedding. Long range dependencies? 
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    % \begin{figure}
+    %     \includegraphics[width=0.6\textwidth]{figures/Delaunay-Rewiring.png}
+    %     \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+    % \end{figure}
 
 \end{frame}
 
 \begin{frame}
-    \frametitle{Theoretical analysis}
-    \begin{figure}
-        \includegraphics[width=0.6\textwidth]{figures/Delaunay-Rewiring.png}
-        \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
-    \end{figure}
+    \frametitle{Delaunay Graph properties}
+    % TODO
+    Sparse graphs
 
+    Raise the homophily value of heterophilic graphs.
+
+    \begin{block}{Reduce over-squashing}
+        $\iff$ Reduce the negative curved edges \\$\iff$ maximize triangles + minimize squares.
+    \end{block}
+    \begin{block}{Reduce over-smoothing}
+        Largest cliques limited to 3 nodes $\Rightarrow$ no over-smoothing \cite[Nguyen et al, 2023]{nguyen2023revisiting}.
+    \end{block}
 \end{frame}
-
-
 % =====================================
 % Experiments
 % =====================================
@@ -209,7 +281,7 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \end{frame}
 
 % Automatic bibliography
-\begin{frame}
+\begin{frame}[allowframebreaks]
     \frametitle{References}
     \scriptsize
     \bibliography{references}
@@ -220,5 +292,114 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 % =====================================
 % Additional slides
 % =====================================
+\begin{frame}
+    \frametitle{Curvature}
+    \label{curvature}
+    \small
+    Balance Forman Curvature \cite[Topping, 2022]{topping2022understandingoversquashingbottlenecksgraphs} is computed over cycles of size 4.
+    $$c_{ij}= \frac{2}{d_i} + \frac{2}{d_j} - 2 + 2 \frac{\sharp_{\Delta}}{\max(d_i, d_j)} + 
+            \frac{\sharp_{\Delta}}{\min(d_i, d_j)} + 
+            \frac{\max(\sharp_{\square}^i,\sharp_{\square}^j)^{-1}}{\max(d_i, d_j)}
+            (\sharp_{\square}^i + \sharp_{\square}^j)
+    $$
+
+    {\tiny
+    where $\sharp_{\Delta}$ is the number of triangles based at $e_{ij}$, 
+    $\sharp_{\square}^i$ is the number of 4-cycles based at $e_{ij}$ starting from $i$
+    without diagonals inside.
+    }
+
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{block} {Curvature of graph edges}           
+            \begin{itemize}
+                \small
+                \item Positive curvature edges establish connections between 
+                nodes belonging to the same community.
+                \\Highly positive curved edges $\rightarrow$ over-smoothing \cite[Nguyen et al., 2023]{nguyen2023revisiting}.
+                
+                \item Negative curvature edges connect nodes from different communities.
+                \\Highly negative curved edges $\rightarrow$ over-squashing \cite[Topping et al., 2021]{topping2022understandingoversquashingbottlenecksgraphs}.
+            \end{itemize}
+        \end{block}
+
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=0.9\textwidth]{figures/original_graph.png}
+                \caption{\scriptsize Example graph: in red the edges with positive curvature ($\sim 3$), 
+                in blue with negative curvature (-1.2) \cite[Attali al., 2024]{attali2024delaunay}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Delaunay Triangulation}
+    \small
+    \begin{block}{Definition}
+        A Delaunay triangulation, denoted as $DT(P)$, for a set $P$ of points 
+        in the $d$-dimensional Euclidean space, is a triangulation where no 
+        point in $P$ resides within the circum-hypersphere of any $d$-simplex 
+        in $DT(P)$.
+        
+    \end{block}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+        In  two dimensions, Delaunay triangulations maximize the angles of triangles 
+        formed by a set of points $\rightarrow$ triangle $\sim$ equilateral.
+
+         
+        \emph{Figure: \href{https://shwestrick.github.io/2021/12/18/delaunay-viz.html}{Sam Westrick}}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=0.7\textwidth]{figures/delaunay-not-delaunay.png}
+                
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{UMAP}
+    \small
+    Uniform Manifold Approximation and Projection (UMAP) is a dimensionality 
+    reduction technique that can be used for visualisation similarly to t-SNE,
+    but also for general non-linear dimension reduction.
+    UMAP constructs a high dimensional graph representation of the data 
+    then optimizes a low-dimensional graph to be as structurally similar as possible.
+    \begin{columns}[t]
+        \begin{column}{0.6\textwidth}
+            \begin{block}{Advantages}
+                
+                \begin{itemize}
+                    \scriptsize
+                    \item \textbf{Speed}: UMAP is faster than t-SNE.
+                    \item \textbf{Global structure}: UMAP preserves more of the global structure.
+                    \item \textbf{Separation}: clearly separate groups of similar categories.
+                \end{itemize}
+            \end{block}
+            Dimensionality reduction technique is perfect - by necessity, we're distorting the data to fit it into lower dimensions - 
+            and UMAP is no exception. But it is a powerful tool to visualize and understand large, high-dimensional datasets.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Hyperparameters choice}
+                \scriptsize
+                Most common: \texttt{n\_neighbors} and \texttt{min\_dist}, control the balance between local and global structure.
+
+            \end{alertblock}
+            \begin{figure}
+                \includegraphics[width=0.8\textwidth]{figures/UMAP_hyperparam.png}
+                \caption{\scriptsize Illustration of UMAP hyperparameters from 
+                    \href{https://pair-code.github.io/understanding-umap/index.html}{Google PAIR}}
+                
+            \end{figure}
+        \end{column}
+    \end{columns}
+
+
+\end{frame}
 
 \end{document}
