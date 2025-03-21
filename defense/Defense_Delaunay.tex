@@ -55,7 +55,7 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 % =====================================
 % Need of graph rewiring
 % =====================================
-\section{Need of graph rewiring}
+\section{Need of Graph Rewiring}
 
 \subsection{Over-Squashing}
 \begin{frame}
@@ -77,10 +77,10 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
             $\Rightarrow$ \emph{Perform poorly when prediction task depends on long-range interaction.}
 
             \begin{block}{Vulnerable GNNs}
-                GNC and GIN \emph{absorb incoming edges equally}, more susceptible to over-squashing than GAT and GGNN.
+                GCNx \emph{absorb incoming edges equally}, more susceptible to over-squashing than GAT.
             \end{block}
             \begin{block}{Curvature metric}
-                \emph{Discrete Ricci curvature} \cite[Topping et al. 2021]{topping2022understandingoversquashingbottlenecksgraphs} to identify bottlenecks.
+                Negative \emph{Discrete Ricci curvature} \cite[Topping et al. 2021]{topping2022understandingoversquashingbottlenecksgraphs} to identify bottlenecks.
             \end{block}
         \end{column}
     \end{columns}
@@ -109,9 +109,9 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
     \end{columns}
 \end{frame}
 
-\subsection{Existing solutions}
+\subsection{Existing Solutions}
 \begin{frame}
-    \frametitle{Existing solutions}
+    \frametitle{Existing Solutions}
     \textbf{Identify the quality of the message passing}:
     \begin{itemize}
         \item \textbf{Graph structure analysis} using curvature, but does not scale.
@@ -140,16 +140,14 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \section{Key technical novelty of the paper}
 
 \subsection{Theoretical Analysis}
-
-
 \begin{frame}
-    \frametitle{Theoretical analysis}
+    \frametitle{Theoretical Analysis}
     \begin{columns}
         \begin{column}{0.6\textwidth}
         \begin{block}{Delaunay rewiring}
             Is an extreme \textbf{4 steps rewiring} method.
             \begin{enumerate}
-                \item First GNN\footnote{GCN from \cite[Kipf and Welling, 2017]{kipf2017semi}} construct \textbf{node embeddings}   .
+                \item First GNN\footnote{GCN from \cite[Kipf and Welling, 2017]{kipf2017semi}} constructs \textbf{node embeddings}   .
                 \item Reduce the embedding with \textbf{UMAP} in dim 2.
                 \item \textbf{Rebuilt edges with Delaunay triangulation}.
                 \item Second GNN \textbf{mix with the original features} of the graph.
@@ -166,9 +164,10 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
     \end{columns}
 \end{frame}
 
+\subsection{Initial Thoughts}
 \begin{frame}
     \frametitle{Initial Thoughts}
-    \begin{columns}
+    \begin{columns}[t]
         \begin{column}{0.5\textwidth}
             \begin{block}{Simplicity of the Method}
                 No hyper-parameters = no grid-search. 
@@ -196,19 +195,30 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 
 \end{frame}
 
+\subsection{Delaunay Graph Properties}
 \begin{frame}
-    \frametitle{Delaunay Graph properties}
-    % TODO
-    Sparse graphs
+    \frametitle{Delaunay Graph Properties}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Sparse graphs}: 6 times less edges (save computation time).
 
-    Raise the homophily value of heterophilic graphs.
+            Raise the homophily value of heterophilic graphs.
 
-    \begin{block}{Reduce over-squashing}
-        $\iff$ Reduce the negative curved edges \\$\iff$ maximize triangles + minimize squares.
-    \end{block}
-    \begin{block}{Reduce over-smoothing}
-        Largest cliques limited to 3 nodes $\Rightarrow$ no over-smoothing \cite[Nguyen et al, 2023]{nguyen2023revisiting}.
-    \end{block}
+            \begin{block}{Reduce over-squashing}
+                $\iff$ Reduce high negative curved edges \\$\iff$ maximize triangles + minimize squares.
+            \end{block}
+            \begin{block}{Reduce over-smoothing}
+                $\iff$ Reduce high positive curved edges.\\
+                Largest cliques limited to 3 nodes $\Rightarrow$ no over-smoothing \cite[Nguyen et al, 2023]{nguyen2023revisiting}.
+            \end{block}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=0.8\textwidth]{figures/Curvature_delaunay.png}
+                \caption{Effect of Delaunay rewiring on curvature distribution [Attali al., 2024] \cite{attali2024delaunay}}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 % =====================================
 % Experiments
@@ -217,50 +227,131 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \subsection{Methodology}
 \begin{frame}
     \frametitle{Methodology}
-    Aim  to reproduce as closely as possible the experiments of the authors. 
-    \begin{itemize}
-        \item Get same datasets, and preprocess them.
-        \item Train the models with the same hyperparameters.
-        \item Finally, we evaluate the models with the same metrics.
-    \end{itemize}
+    \textbf{Aim}: Reproduce the rewiring experiment on the \textbf{Wisconsin dataset}\footnote{
+        From WebKB dataset, 251 nodes = web pages from Wisconsin connected
+        by edges = hyperlinks, node features = bag-of-words in dim 1703, labels =  5 kind of author.}.
 
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Experimental setup}
+                \begin{itemize}
+                    \item \textbf{Device}: CUDA-enabled GPU with \texttt{PyTorch Geometric, UMAP, NetworkX, GraphRicciCurvature}
+                    \item \textbf{Preprocessing}: Feature normalization.
+                    \item \textbf{Runs}: 10 per experiment, max 2000 epochs, early stopping patience 100 epochs.
+                \end{itemize}
+            \end{block}
+        \end{column}    
+
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Key results}
+                \begin{itemize}
+                        \item \textbf{GCN} accuracy improved from 54.90\% to 67.55\% (+12.6\%)
+                        \item \textbf{GAT} accuracy improved from 55.88\% to 69.12\% (+13.2\%)
+                        \item Graph \textbf{homophily} increased by 96\% (0.366 → 0.718)
+                \end{itemize}
+                $p \le 0.0001$: statistically significant.
+            \end{block}
+
+
+        \end{column}
+    \end{columns}   
+    \textbf{Significant performance gains across different model architectures.}
+    $\Rightarrow$ \textbf{Success}!
         
 \end{frame}
 
 \subsection{Results}
 \begin{frame}
-    \frametitle{Results}
-    \begin{exampleblock}{Text Dataset preparation}
-        \begin{itemize}
-            \item Text8 (English Wikipedia) processed.
-            \item OpenWebText (GPT2 training material) processed in 18 hours.
-            \item train/validation/test split according to experimental methodology.
-        \end{itemize}
-    \end{exampleblock}
+    \frametitle{Results: Graph Property Analysis}
 
-    \begin{alertblock}{We were unable to run the models}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item \textbf{Baseline Graph}
+                \begin{itemize}
+                    \item Mean Degree: 5.59
+                    \item Homophily: 0.366
+                    \item Curvature Range: [-0.475, 0.250]
+                \end{itemize}
+                \item \textbf{Delaunay Graph}
+                \begin{itemize}
+                    \item Mean Degree: 7.83-7.87
+                    \item Homophily: 0.704-0.718 (improved by ~96\%)
+                    \item Curvature Range: [-0.214, 0.200]
+                \end{itemize}
+            \end{itemize}
+            \begin{figure}
+                \includegraphics[width=0.7\textwidth]{figures/wisconsin_results.png}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \begin{tabular}{cc}
+                    \includegraphics[width=0.45\textwidth]{figures/Wisconsin_degree_distrib_original.png} &
+                    \includegraphics[width=0.45\textwidth]{figures/Wisconsin_degree_hist_original.png} \\
+                    \includegraphics[width=0.45\textwidth]{figures/baseline_degree_dist_baseline_graph_20250314_180715.png} &
+                    \includegraphics[width=0.45\textwidth]{figures/delaunay_degree_dist_delaunay_graph_20250314_180840.png}
+                \end{tabular}
+                \caption{Effect of the Delaunay rewiring on degree distribution. 
+                Left: original, Right: after rewiring, Top: [Attali al., 2024] \cite{attali2024delaunay}, Bottom: ours.}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results: Performance Improvements on Prediction Task}
+
+    \begin{figure}
+        \includegraphics[width=0.6\textwidth]{figures/performance_comparison_20250314_194357.png}
+    \end{figure}
+
+    \begin{block}{Performance Improvements}
         \begin{itemize}
-            \item Training impossible on our machines (size of model).
-            \item Does not work on Colab (tensorflow numpy2 incompatibilities).
-            \item No trained model shared by the authors.
-        \end{itemize}
-    \end{alertblock}
-    
+            \item \textbf{GCN}: 54.90\% to 67.55\% (+12.6\%)
+            \item \textbf{GAT}: 55.88\% to 69.12\% (+13.2\%)
+            \item \textbf{Statistical significance}: t-statistic:-8, $p \le 0.0001$
+        \end{itemize}    
+    \end{block}
 \end{frame}
 
 \subsection{Discussion}
 \begin{frame}
     \frametitle{Discussion}
-    \textbf{We faced huge challenges}
-    \begin{itemize}
-        \item Graphs
-    \end{itemize} 
-    
-    \textbf{Future paper that will be explored in the report:}
-    \begin{itemize}
-        \item \textit{Cayley Graph Propagation} by JJ Wilson, Maya 
-        Bechler-Speicher, Petar Veličković \cite{wilson2024cayleygraphpropagation}
-    \end{itemize}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Performance}
+                Delaunay rewiring \textbf{increase graph homophily} and \textbf{reduce negative curvature},
+                with more \textbf{balanced degree distribution}.
+                Improvements are statistically significant (p $<$ 0.0001).
+                GAT slightly outperformed GCN in both baseline and Delaunay settings.
+            \end{block}
+
+            \begin{block}{Consistency of results}
+                Delaunay graph properties show small variations, indicating stability.
+                Performance improvements are robust across different random splits.
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+
+            \begin{alertblock}{Limitations}
+                \begin{itemize}
+                    \item \textbf{Dimensionality reduction} loss of feature expression.
+                    We did not explore higher dimensions.
+                    \item \textbf{Computational considerations} 
+                        Complexity of $\mathcal{O} \big( N \log N \big)$ only, but graph fully
+                        loaded into memory and UMAP + curvature computation.
+                    \item \textbf{Parameters}
+                    \begin{itemize}
+                        \item UMAP has hyperparameters.
+                        \item Dependence on feature normalization?
+                        \item Effect of different data splits?
+                    \end{itemize}
+                     
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =====================================
@@ -269,10 +360,18 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
 \section{Conclusion}
 \begin{frame}
     \frametitle{Conclusion}
+    \begin{block}{Findings}
+        \begin{itemize}
+            \item We have understood the problem of over-smoothing and over-squashing
+            \item We have understood the process from the authors.
+            \item We were able to reproduce the experiment on the Wisconsin dataset.
+            \item We confirm the results of the authors.
+        \end{itemize}
+    \end{block}
+    \textbf{Future paper that will be explored in the report:}
     \begin{itemize}
-        \item Cannot confirm the results o
-        \item Not able to reproduce.
-        \item Hard time digging in code and documentation.
+        \item \textit{Cayley Graph Propagation} by JJ Wilson, Maya 
+        Bechler-Speicher, Petar Veličković \cite{wilson2024cayleygraphpropagation}
     \end{itemize}
 
     \begin{block}{Do you have any question?}
@@ -296,7 +395,10 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
     \frametitle{Curvature}
     \label{curvature}
     \small
-    Balance Forman Curvature \cite[Topping, 2022]{topping2022understandingoversquashingbottlenecksgraphs} is computed over cycles of size 4.
+    Paper: Balance Forman Curvature \cite[Topping, 2022]{topping2022understandingoversquashingbottlenecksgraphs} is computed over cycles of size 4.\\
+    \emph{Experiment: Oliver-Ricci Curvature \cite[Ni, 2015]{ni2015riccicurvatureinternettopology}} {\scriptsize
+    \texttt{GraphRicciCurvature.OllivierRicci}.
+    }\\
     $$c_{ij}= \frac{2}{d_i} + \frac{2}{d_j} - 2 + 2 \frac{\sharp_{\Delta}}{\max(d_i, d_j)} + 
             \frac{\sharp_{\Delta}}{\min(d_i, d_j)} + 
             \frac{\max(\sharp_{\square}^i,\sharp_{\square}^j)^{-1}}{\max(d_i, d_j)}
@@ -347,11 +449,21 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
     \end{block}
     \begin{columns}
         \begin{column}{0.6\textwidth}
-        In  two dimensions, Delaunay triangulations maximize the angles of triangles 
-        formed by a set of points $\rightarrow$ triangle $\sim$ equilateral.
+            \begin{itemize}
+                \item  \textbf{Experiment function:}
+            We use the \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.Delaunay.html}{SciPy}
+            implementation with the \emph{joggled input} parameter.
+            {\scriptsize
+            \texttt{scipy.spatial.Delaunay(positions, qhull\_options=QJ)}
+            }\\
 
-         
-        \emph{Figure: \href{https://shwestrick.github.io/2021/12/18/delaunay-viz.html}{Sam Westrick}}
+
+            \item \textbf{Geometric interpretation:}
+            In  two dimensions, Delaunay triangulations maximize the angles of triangles 
+            formed by a set of points $\rightarrow$ triangle $\sim$ equilateral.
+            \emph{Figure: \href{https://shwestrick.github.io/2021/12/18/delaunay-viz.html}{Sam Westrick}}
+        \end{itemize}
+
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{figure}
@@ -381,7 +493,7 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
                     \item \textbf{Separation}: clearly separate groups of similar categories.
                 \end{itemize}
             \end{block}
-            Dimensionality reduction technique is perfect - by necessity, we're distorting the data to fit it into lower dimensions - 
+            Dimensionality reduction technique is not perfect - by necessity, we're distorting the data to fit it into lower dimensions - 
             and UMAP is no exception. But it is a powerful tool to visualize and understand large, high-dimensional datasets.
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -400,6 +512,93 @@ by Attali H., Duscaldi D. and Pernelle N. \texorpdfstring{\cite{attali2024delaun
     \end{columns}
 
 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Graph Neural Networks}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{GCN}
+                \begin{itemize}
+                    \item Hidden channels: 32
+                    \item Two layers with ReLU activation
+                    \item Dropout: 0.5
+                    \item Learning rate: 0.005
+                    \item Weight decay: 5e-6
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{GCN}
+                \begin{itemize}
+                    \item Hidden channels: 32
+                    \item First layer: 8 attention heads
+                    \item Second layer: 1 attention head
+                    \item Dropout: 0.5
+                    \item Learning rate: 0.005
+                    \item Weight decay: 5e-6
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Runtime Performance}
+    \begin{columns}[t]
+        \begin{column}{0.33\textwidth}
+            \textbf{Preprocessing Time:}
+            \begin{itemize}
+                \small
+                \item UMAP dimensionality reduction: ~1-2 seconds
+                \item Delaunay triangulation: < 1 second
+                \item Curvature calculation: ~3-5 seconds per graph
+                \item Total preprocessing overhead: ~5-8 seconds
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+        \textbf{Training Performance:}
+            \begin{itemize}
+        \small
+
+                \item Average epochs until convergence:
+                \begin{itemize}
+                    \scriptsize
+                    \item Baseline GCN: ~150 epochs
+                    \item Delaunay GCN: ~130 epochs
+                    \item Baseline GAT: ~180 epochs
+                    \item Delaunay GAT: ~160 epochs
+                \end{itemize}
+                \item Training time per epoch:
+                \begin{itemize}
+                    \scriptsize
+                    \item GCN: ~0.1 seconds
+                    \item GAT: ~0.2 seconds
+                \end{itemize}
+                \item Total training time per run:
+                \begin{itemize}
+                    \scriptsize
+                    \item Baseline models: 15-35 seconds
+                    \item Delaunay models: 13-32 seconds
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{Memory Usage:}
+            \begin{itemize}
+                \small
+                \item Peak memory during preprocessing: ~2GB
+                \item Training memory footprint:
+                \begin{itemize}
+                    \scriptsize
+                    \item Baseline: ~1GB
+                    \item Delaunay: ~1.2GB
+                \end{itemize}
+                \item Additional storage for results: < 100MB
+            \end{itemize}
+        \end{column}
+        
+    \end{columns}
 \end{frame}
 
 \end{document}
