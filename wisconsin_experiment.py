@@ -1,8 +1,13 @@
 import os
+import sys
 import time
 import json
 import argparse
 import numpy as np
+
+# Add project root to path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from config import DATA_DIR, WISCONSIN_DIR
 import torch
 import torch.nn.functional as F
 from torch_geometric.datasets import WebKB
@@ -221,7 +226,7 @@ def main(args):
     print(f"Running {args.mode} experiment on {exp.device}")
     
     # Load and preprocess data
-    dataset = WebKB(root="data/", name="Wisconsin", transform=NormalizeFeatures())
+    dataset = WebKB(root=DATA_DIR, name="Wisconsin", transform=NormalizeFeatures())
     data = dataset[0]
     
     # Log dataset statistics
@@ -334,7 +339,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run Wisconsin experiments')
     parser.add_argument('--mode', type=str, choices=['baseline', 'delaunay'], required=True,
                       help='Experiment mode: baseline or delaunay')
-    parser.add_argument('--exp_dir', type=str, default='Delaunay-Rewiring/experiments/wisconsin',
+    parser.add_argument('--exp_dir', type=str, default=WISCONSIN_DIR,
                       help='Directory for saving experiment results')
     parser.add_argument('--num_runs', type=int, default=10,
                       help='Number of experimental runs')

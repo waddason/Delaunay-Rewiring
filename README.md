@@ -51,7 +51,7 @@ python wisconsin_experiment.py --mode baseline --num_runs 10
 python wisconsin_experiment.py --mode delaunay --num_runs 10
 
 # Analyze results
-python wisconsin/compare_results.py --aggregate
+python experiments/wisconsin/compare_results.py --aggregate
 ```
 
 3. View results:

@@ -2,14 +2,19 @@ import json
 import os
 import glob
 import argparse
+import sys
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# Add project root to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from config import RESULTS_DIR, PLOTS_DIR
+
 def load_results(mode, specific_file=None):
     """Load results files for given mode."""
-    pattern = f"Delaunay-Rewiring/experiments/wisconsin/results/{mode}_results_*.json"
+    pattern = os.path.join(RESULTS_DIR, f"{mode}_results_*.json")
     files = glob.glob(pattern)
     if not files:
         raise FileNotFoundError(f"No results found for {mode}")
@@ -166,8 +171,7 @@ def main(args):
                           delaunay_agg['gat_accuracies'], "GAT")
         
         # Create plots
-        plots_dir = 'Delaunay-Rewiring/experiments/wisconsin/plots'
-        plot_results(baseline_agg, delaunay_agg, plots_dir)
+        plot_results(baseline_agg, delaunay_agg, PLOTS_DIR)
         
     else:
         # Use only the most recent results (or specified files)
@@ -206,14 +210,13 @@ def main(args):
                           delaunay['gat_results']['accuracies'], "GAT")
         
         # Create plots for single experiment comparison
-        plots_dir = 'Delaunay-Rewiring/experiments/wisconsin/plots'
         plot_results({
             'gcn_accuracies': baseline['gcn_results']['accuracies'],
             'gat_accuracies': baseline['gat_results']['accuracies']
         }, {
             'gcn_accuracies': delaunay['gcn_results']['accuracies'],
             'gat_accuracies': delaunay['gat_results']['accuracies']
-        }, plots_dir)
+        }, PLOTS_DIR)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Compare experiment results')
