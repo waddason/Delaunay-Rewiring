@@ -14,12 +14,12 @@ The Delaunay rewiring method reconstructs graph connectivity using Delaunay tria
 
 | Model | Baseline | Delaunay | Improvement |
 |-------|----------|----------|-------------|
-| GCN   | 54.90%   | 67.55%   | +12.6%      |
-| GAT   | 55.88%   | 69.12%   | +13.2%      |
+| GCN   | 54.90%   | 69.35%   | +14.4%      |
+| GAT   | 55.88%   | 70.46%   | +14.6%      |
 
 Graph Properties:
-- Homophily: 0.366 → 0.718 (+96%)
-- Curvature Range: [-0.475, 0.250] → [-0.214, 0.200]
+- Homophily: 0.366 → 0.712 (+94%)
+- Curvature Range: [-0.475, 0.250] → [-0.182, 0.179]
 - All improvements statistically significant (p < 0.0001)
 
 ## Repository Structure

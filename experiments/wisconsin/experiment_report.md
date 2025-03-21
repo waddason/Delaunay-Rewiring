@@ -27,9 +27,9 @@
 This report presents a comprehensive evaluation of the Delaunay rewiring approach on the Wisconsin dataset, demonstrating substantial improvements in graph neural network performance:
 
 **Key Results**:
-- GCN accuracy improved from 54.90% to 67.55% (+12.6%)
-- GAT accuracy improved from 55.88% to 69.12% (+13.2%)
-- Graph homophily increased by 96% (0.366 → 0.718)
+- GCN accuracy improved from 54.90% to 69.35% (+14.4%)
+- GAT accuracy improved from 55.88% to 70.46% (+14.6%)
+- Graph homophily increased by 94% (0.366 → 0.712)
 - All improvements are statistically significant (p < 0.0001)
 
 **Impact**: The Delaunay rewiring approach successfully addresses over-squashing and improves graph structure, leading to significant performance gains across different model architectures.
@@ -93,31 +93,31 @@ This report presents a comprehensive evaluation of the Delaunay rewiring approac
 
 ### GCN Results
 - Baseline: 54.90% ± 3.92% (range: 50.98% - 64.71%)
-- Delaunay: 67.55% ± 5.67% (range: 56.86% - 78.43%)
-- Absolute Improvement: 12.6%
+- Delaunay: 69.35% ± 5.41% (range: 54.90% - 80.39%)
+- Absolute Improvement: 14.4%
 - Statistical Significance:
-  * t-statistic: -8.0011
+  * t-statistic: -16.6146
   * p-value: < 0.0001 (highly significant)
 
 ### GAT Results
 - Baseline: 55.88% ± 4.23% (range: 50.98% - 64.71%)
-- Delaunay: 69.12% ± 5.81% (range: 58.82% - 78.43%)
-- Absolute Improvement: 13.2%
+- Delaunay: 70.46% ± 5.22% (range: 56.86% - 82.35%)
+- Absolute Improvement: 14.6%
 - Statistical Significance:
-  * t-statistic: -8.0264
+  * t-statistic: -16.6599
   * p-value: < 0.0001 (highly significant)
 
 ## Key Findings
 
 1. **Graph Structure Improvements**:
-   - Delaunay rewiring significantly increased graph homophily (~96% improvement)
-   - Reduced negative curvature (from -0.475 to -0.214) suggests less over-squashing
-   - More balanced degree distribution (higher mean degree with less variance)
+   - Delaunay rewiring significantly increased graph homophily (~94% improvement)
+   - Reduced negative curvature (from -0.475 to -0.182) suggests less over-squashing
+   - More balanced degree distribution (mean degree 5.59 → 7.82-7.89)
 
 2. **Model Performance**:
-   - Both GCN and GAT showed substantial improvements
-   - Improvements are statistically significant (p < 0.0001)
-   - GAT slightly outperformed GCN in both baseline and Delaunay settings
+   - Both GCN and GAT showed substantial improvements (~14.5% on average)
+   - Improvements are highly significant (p < 0.0001, t > 16)
+   - GAT consistently outperformed GCN in Delaunay setting (70.46% vs 69.35%)
 
 3. **Consistency**:
    - Results are consistent across multiple experiments
@@ -219,4 +219,4 @@ Performance comparison plots are saved in:
    - Comparison of different triangulation algorithms
 
 ## Conclusion
-The Delaunay rewiring approach demonstrates significant and consistent improvements on the Wisconsin dataset. The improvements are not only substantial in magnitude (12.6-13.2%) but also statistically significant, with both GCN and GAT models benefiting from the rewiring. The enhanced graph properties (improved homophily and reduced negative curvature) provide structural evidence for why the approach works well. While there are some limitations and areas for future investigation, the current results strongly support the effectiveness of this approach for improving graph neural network performance.
+The Delaunay rewiring approach demonstrates significant and consistent improvements on the Wisconsin dataset. The improvements are not only substantial in magnitude (14.4-14.6%) but also statistically significant (p < 0.0001), with both GCN and GAT models benefiting from the rewiring. The enhanced graph properties (improved homophily by 94% and reduced negative curvature) provide structural evidence for why the approach works well. Our comprehensive experiments across multiple runs demonstrate the robustness and reliability of these improvements. While there are some limitations and areas for future investigation, the current results strongly support the effectiveness of this approach for improving graph neural network performance.

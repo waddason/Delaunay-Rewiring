@@ -51,9 +51,9 @@ wisconsin/
 4. Check experiment_report.md for detailed findings
 
 ### Key Results
-- GCN: 54.90% → 67.55% (+12.6%)
-- GAT: 55.88% → 69.12% (+13.2%)
-- Homophily: 0.366 → 0.718 (+96%)
+- GCN: 54.90% → 69.35% (+14.4%)
+- GAT: 55.88% → 70.46% (+14.6%)
+- Homophily: 0.366 → 0.712 (+94%)
 
 ### Notes
 - All experiments use fixed random seeds for reproducibility
