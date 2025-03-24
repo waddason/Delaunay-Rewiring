@@ -107,7 +107,7 @@
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-This document reviews the graph rewiring method proposed by \cite{attali2024delaunay}[Attali et al, 2024]
+This document reviews the graph rewiring method proposed by \cite{attali2024delaunay}
 based on Delauynay triangulation that aims to avoid over-smoothing and over-squashing
 during prediction tasks. It uses notions of edge curvature to measure the quality
 of the rewiring. The method is tested on a variety of graph datasets and compared
@@ -166,12 +166,13 @@ of the rewiring is the discrete Ricci edge curvature. A complete definition can 
         Highly negative curved edges cause over-squashing \cite{topping2022understandingoversquashingbottlenecksgraphs}.
 \end{itemize}
 \begin{figure}[ht]
-    \label{fig:edge_curvature}
+
     \vskip -0.2in
     \begin{center}
     \includegraphics[width=0.6\columnwidth]{figures/original_graph.png}
     \caption{\scriptsize Example graph: in red the edges with positive curvature ($\sim 3$), 
     in blue with negative curvature (-1.2) \cite{attali2024delaunay}}
+    \label{fig:edge_curvature}
     \end{center}
     \vskip -0.2in
 \end{figure}
@@ -206,13 +207,22 @@ Is an extreme \textbf{4 steps rewiring} method illustrated bellow.
 \end{enumerate}
 \begin{figure}[ht!]
     \begin{center}
-    \label{fig:delaunay_rewiring}
     \vskip -0.2in
     \includegraphics[width=0.9\columnwidth]{figures/Rewiring_method.png}
     %\caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
     \vskip -0.2in
+    \label{fig:delaunay_rewiring}
     \end{center}
     \end{figure}
+
+% TODO 
+\paragraph{Delauynay Algorithm}
+
+\paragraph{GNN embedding}
+
+
+
+
 
 \paragraph{Initial throughts}
 The method is remarkably simple, as it does not require any hyperparameters according to authors, 
@@ -243,10 +253,10 @@ approach, demonstrating substantial improvements in graph neural network perform
 
 \textbf{Key Results}:
 \begin{itemize}
-    \item GCN accuracy improved from 54.90\% to 67.55\% (+12.6\%)
-    \item GAT accuracy improved from 55.88\% to 69.12\% (+13.2\%)
-    \item Graph homophily increased by 96\% (0.366 $\to$ 0.718)
-    \item All improvements are statistically significant ($p < 0.0001$)
+    \item GCN accuracy improved from $54.90\%$ to $67.55\%$ $(+12.6\%)$
+    \item GAT accuracy improved from $55.88\%$ to $69.12\%$ $(+13.2\%)$
+    \item Graph homophily increased by $96\%$ ($0.366 \to  0.718$)
+    \item All improvements are statistically significant ($p<0.0001$)
 \end{itemize}
 
 \begin{table}[h!]
@@ -315,10 +325,19 @@ If we were to work further in this topic, we could focus on:
 % Other paper
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Additional Paper}
+We have chosen to dig into another rewiring method proposed by \cite{wilson2024cayleygraphpropagation}
+based on Cayley graphs, named \textbf{Cayley Graph Propagation}. 
+The authors have focus on the creation of bottleneck-free
+structure to ameliorate the over-squashing effect. 
 
 % TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Choice explanation}
+We have chosen this paper because it follows the exact same idea of rewiring
+the initial graph using a mathematical structure. The Delaunay Triangulation
+on the first side used geometric properties. The Cayley graph on the second side
+is a mathematical structure that can be used to represent a group. It seems
+to us that the two methods are competitive and complementary.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Paper summary}
@@ -371,21 +390,42 @@ We hope to see this method adopted.
 \appendix
 \onecolumn
 
-\section{Additional details on the Delaunay Rewiring }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Delaunay
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Additional details on the Delaunay Rewiring method}
+\subsection{Delaunay Triangulation}
+The Delaunay triangulation is a method to construct a graph from a set of points in a space.
+It is a well-known method in computational geometry and has been used in various applications.
+
 \label{app:delaunay}
 \begin{figure}[h!]
-    \label{fig:delaunay_full}
+    \center
+
     \includegraphics[width=0.9\textwidth]{figures/delaunay_process.png}
     \caption{Illustration of the Delaynay rewiring process in a 2-dimension feature space.}
+    \label{fig:delaunay_full}
 \end{figure}
+\begin{definition}
+    \label{def:delaunay}
+A Delaunay triangulation, denoted as $DT(P)$, for a set $P$ of points 
+        in the $d$-dimensional Euclidean space, is a triangulation where no 
+        point in $P$ resides within the circum-hypersphere of any $d$-simplex 
+        in $DT(P)$.
+    \end{definition}
 
-\section{Edge Curvature}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Edge curvature
+
+\subsection{Edge Curvature}
 \label{app:curvature}
-
-Paper: Balance Forman Curvature \cite{topping2022understandingoversquashingbottlenecksgraphs} is computed over cycles of size 4.\\
-    \emph{Experiment: Oliver-Ricci Curvature \cite{ni2015riccicurvatureinternettopology}} {\scriptsize
-    \texttt{GraphRicciCurvature.OllivierRicci}.
-    }\\
+We describe bellow the two main curvature metrics used in the Delaunay rewiring method.
+\paragraph{Paper}: 
+Balance Forman Curvature \cite{topping2022understandingoversquashingbottlenecksgraphs} 
+is computed over cycles of size 4.
+    
+\textbf{Balance Forman Curvature}:
     $$c_{ij}= \frac{2}{d_i} + \frac{2}{d_j} - 2 + 2 \frac{\sharp_{\Delta}}{\max(d_i, d_j)} + 
             \frac{\sharp_{\Delta}}{\min(d_i, d_j)} + 
             \frac{\max(\sharp_{\square}^i,\sharp_{\square}^j)^{-1}}{\max(d_i, d_j)}
@@ -397,155 +437,176 @@ Paper: Balance Forman Curvature \cite{topping2022understandingoversquashingbottl
     without diagonals inside.
 
 
-    
-%%% EXAMPLES
-\begin{figure}[ht]
-    \vskip 0.2in
-    \begin{center}
-    \centerline{\includegraphics[width=\columnwidth]{icml_numpapers}}
-    \caption{Historical locations and number of accepted papers for International
-    Machine Learning Conferences (ICML 1993 -- ICML 2008) and International
-    Workshops on Machine Learning (ML 1988 -- ML 1992). At the time this figure was
-    produced, the number of accepted papers for ICML 2008 was unknown and instead
-    estimated.}
-    \label{icml-historical}
-    \end{center}
-    \vskip -0.2in
-    \end{figure}
-    
-    \subsection{Figures}
-    
-    You may want to include figures in the paper to illustrate
-    your approach and results. Such artwork should be centered,
-    legible, and separated from the text. Lines should be dark and at
-    least 0.5~points thick for purposes of reproduction, and text should
-    not appear on a gray background.
-    
-    Label all distinct components of each figure. If the figure takes the
-    form of a graph, then give a name for each axis and include a legend
-    that briefly describes each curve. Do not include a title inside the
-    figure; instead, the caption should serve this function.
-    
-    Number figures sequentially, placing the figure number and caption
-    \emph{after} the graphics, with at least 0.1~inches of space before
-    the caption and 0.1~inches after it, as in
-    \cref{icml-historical}. The figure caption should be set in
-    9~point type and centered unless it runs two or more lines, in which
-    case it should be flush left. You may float figures to the top or
-    bottom of a column, and you may set wide figures across both columns
-    (use the environment \texttt{figure*} in \LaTeX). Always place
-    two-column figures at the top or bottom of the page.
-    
-    \subsection{Algorithms}
-    
-    If you are using \LaTeX, please use the ``algorithm'' and ``algorithmic''
-    environments to format pseudocode. These require
-    the corresponding stylefiles, algorithm.sty and
-    algorithmic.sty, which are supplied with this package.
-    \cref{alg:example} shows an example.
-    
-    \begin{algorithm}[tb]
-       \caption{Bubble Sort}
-       \label{alg:example}
-    \begin{algorithmic}
-       \STATE {\bfseries Input:} data $x_i$, size $m$
-       \REPEAT
-       \STATE Initialize $noChange = true$.
-       \FOR{$i=1$ {\bfseries to} $m-1$}
-       \IF{$x_i > x_{i+1}$}
-       \STATE Swap $x_i$ and $x_{i+1}$
-       \STATE $noChange = false$
-       \ENDIF
-       \ENDFOR
-       \UNTIL{$noChange$ is $true$}
-    \end{algorithmic}
-    \end{algorithm}
-    
-    \subsection{Tables}
-    
-    You may also want to include tables that summarize material. Like
-    figures, these should be centered, legible, and numbered consecutively.
-    However, place the title \emph{above} the table with at least
-    0.1~inches of space before the title and the same after it, as in
-    \cref{sample-table}. The table title should be set in 9~point
-    type and centered unless it runs two or more lines, in which case it
-    should be flush left.
-    
-    % Note use of \abovespace and \belowspace to get reasonable spacing
-    % above and below tabular lines.
-    
-    \begin{table}[t]
-    \caption{Classification accuracies for naive Bayes and flexible
-    Bayes on various data sets.}
-    \label{sample-table}
-    \vskip 0.15in
-    \begin{center}
-    \begin{small}
-    \begin{sc}
-    \begin{tabular}{lcccr}
-    \toprule
-    Data set & Naive & Flexible & Better? \\
-    \midrule
-    Breast    & 95.9$\pm$ 0.2& 96.7$\pm$ 0.2& $\surd$ \\
-    Cleveland & 83.3$\pm$ 0.6& 80.0$\pm$ 0.6& $\times$\\
-    Glass2    & 61.9$\pm$ 1.4& 83.8$\pm$ 0.7& $\surd$ \\
-    Credit    & 74.8$\pm$ 0.5& 78.3$\pm$ 0.6&         \\
-    Horse     & 73.3$\pm$ 0.9& 69.7$\pm$ 1.0& $\times$\\
-    Meta      & 67.1$\pm$ 0.6& 76.5$\pm$ 0.5& $\surd$ \\
-    Pima      & 75.1$\pm$ 0.6& 73.9$\pm$ 0.5&         \\
-    Vehicle   & 44.9$\pm$ 0.6& 61.5$\pm$ 0.4& $\surd$ \\
-    \bottomrule
+\paragraph{Experiment}: 
+\textbf{Oliver-Ricci Curvature} \cite{ni2015riccicurvatureinternettopology} 
+
+We used the specific implementation from \texttt{GraphRicciCurvature.OllivierRicci}. 
+Node Ricci curvature is defined as the average of all it’s adjacency edge. A visual
+representation of the curvature of edges in a graph is shown in the \ref{fig:ricci_edge_curvature} below 
+from the original paper.
+\begin{figure}[ht!]
+    \center
+    \includegraphics[width=0.6\textwidth]{figures/Riccicurvature.png}
+    \caption{ It shows the Ricci curvature of each edge in a router level graph
+    (Exodus(US)) from the Rocketfuel data set with 895 nodes and 2071
+    edges. Negatively curved edges (in red) behave like “backbones”,
+    maintaining the connectivity of clusters that are grouped by zero and
+    positively curved edges (in green and blue). Source \cite{ni2015riccicurvatureinternettopology}}
+    \label{fig:ricci_edge_curvature}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% UMAP
+\subsection{UMAP}
+\paragraph{Method presentation}
+Uniform Manifold Approximation and Projection (UMAP) is a dimensionality 
+reduction technique that can be used for visualisation similarly to t-SNE,
+but also for general non-linear dimension reduction.
+UMAP constructs a high dimensional graph representation of the data 
+then optimizes a low-dimensional graph to be as structurally similar as possible.
+
+\begin{itemize}
+    \item \textbf{Speed}: UMAP is faster than t-SNE.
+    \item \textbf{Global structure}: UMAP preserves more of the global structure.
+    \item \textbf{Separation}: clearly separate groups of similar categories.
+\end{itemize}
+Dimensionality reduction technique is not perfect - by necessity, we're distorting
+ the data to fit it into lower dimensions - and UMAP is no exception. 
+ But it is a powerful tool to visualize and understand large, high-dimensional datasets.
+
+\paragraph{Hyperparameters choice}
+Most common: \texttt{n\_neighbors} and \texttt{min\_dist}, control the balance between local and global structure.
+They have a significant impact on the resulting embedding, and the choice of these parameters is crucial.
+A visual example of their effect on the same two linked circles is shown in the \cref{fig:umap_hyperparam} below.
+\begin{itemize}
+    \item \texttt{n\_neighbors}: number of neighbors used to construct the high-dimensional graph.
+    \item \texttt{min\_dist}: minimum distance between points in the low-dimensional space.
+\end{itemize}
+\begin{figure}[ht!]
+    \center
+    \includegraphics[width=0.8\textwidth]{figures/UMAP_hyperparam.png}
+    \caption{\scriptsize Illustration of UMAP hyperparameters from 
+        \href{https://pair-code.github.io/understanding-umap/index.html}{Google PAIR}}
+    \label{fig:umap_hyperparam}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Experiment
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiment Details on the Delaunay Rewiring method}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Wisconsin Dataset}
+WebKB is a dataset that includes web pages from computer science departments of 
+various universities. It represents $4,518$ web pages that are categorized into 6 imbalanced categories 
+(Student, Faculty, Staff, Department, Course, Project). Additionally there is 
+Other miscellanea category that is not comparable to the rest. We have used the
+Wisconsin subset of the dataset, which contains 251 web pages from the University of Wisconsin-Madison.
+
+We used the classical dataset splitting from Train/Val/Test Split: $60\%/20\%/20\%$ 
+as proposed by \cite{attali2024delaunay}. We add our own data preprocessing in normalizaing the features.
+Our experiment modestly reaches a $69.12\%$ accuracy on the Wisconsin dataset,
+which has been outperformed by other methods since 2019 has shown in the leaderboard bellow.
+\footnote{Highest accuracy on the Wisconsin dataset is $90.5\%$ by \cite{huang2024higherordergraphconvolutionalnetwork}, using
+Higher-order Graph Convolutional Network (HiGCN) grounded in Flower Petals Laplacians, 
+capable of discerning intrinsic features across varying topological scales. }
+
+\begin{figure}[htb!]
+    \includegraphics[width=\textwidth]{figures/Wisconsin_leaderboard.png}
+    \caption{Performance of GNN on the Wisconsin dataset, from \href{https://paperswithcode.com/sota/node-classification-on-wisconsin}{Paper With Code}.}
+    \label{fig:wisconsin_leaderboard}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Graph Neural Networks}
+We used two popular GNN architectures: Graph Convolutional Networks (GCN) and Graph Attention Networks (GAT).
+\begin{table}[h!]
+\caption{Hyperparameters for GCN and GAT Models}
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Hyperparameter}       & \textbf{GCN}                          & \textbf{GAT}                          \\ \hline
+Hidden Channels               & $32$                                  & $32$                                  \\ \hline
+Layers                        & $2$ (ReLU activation)                 & $2$ ($8$ attention heads in $1$st layer, $1$ in $2$nd) \\ \hline
+Dropout                       & $0.5$                                 & $0.5$                                 \\ \hline
+Learning Rate                 & $0.005$                               & $0.005$                               \\ \hline
+Weight Decay                  & $5 \times 10^{-6}$                    & $5 \times 10^{-6}$                    \\ \hline
+Training Time per Epoch       & $0.1$s (empirical)                    & $0.2$s (empirical)                    \\ \hline
+\end{tabular}
+\label{tab:hyperparameters}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experimental setup}
+\paragraph{Hardware and Software}
+The experiments were conducted on a CUDA-enabled GPU with the following software dependencies:
+\begin{itemize}
+    \item \textbf{Device}: CUDA-enabled GPU with \texttt{PyTorch Geometric, UMAP, NetworkX, GraphRicciCurvature}
+    \item \textbf{Preprocessing}: Feature normalization.
+    \item \textbf{Runs}: 10 per experiment, max 2000 epochs, early stopping patience 100 epochs.
+\end{itemize}
+
+\textbf{Preprocessing Time}:
+\begin{itemize} 
+    \item UMAP dimensionality reduction: ~1-2 seconds.
+    \item Delaunay triangulation: $< 1$ second.
+    \item Curvature calculation: $\sim 3-5$ seconds per graph.
+    \item Total preprocessing overhead: $\sim 5-8$ seconds.
+\end{itemize}
+
+\begin{table}[h!]
+\caption{Training Metrics Comparison}
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Average Epochs Until Convergence} & \textbf{Baseline} & \textbf{Delaunay} & \textbf{s/epoch}\\ \hline
+GCN                          & $\sim 150$ epochs       & $\sim 130$ epochs       & $0.1$s\\ \hline
+GAT                          & $\sim 180$ epochs       & $\sim 160$ epochs       & $0.2$s\\ \hline
+
+\end{tabular}
+\label{tab:training_metrics}
+\end{table}
+
+\paragraph{Memory Usage}
+Peak memory during preprocessing: $\sim 2GB$, Training memory footprint: Baseline: $\sim~1GB$;
+Delaunay: $\sim 1.2GB$. Additional storage for results: $< 100$MB.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Results}
+Our experiment modestly reaches a 69.12\% accuracy on the Wisconsin dataset,
+which has been outperformed by other methods since 2019 has shown in the leaderboard \cref{fig:wisconsin_leaderboard}.
+The results are summarized in \cref{tab:graph_comparison}.
+\begin{table}[h!]
+    \caption{Comparison of Baseline and Delaunay Graph Metrics}
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Metric}          & \textbf{Orignal} & \textbf{Delaunay Graph} \\ \hline
+    Mean Degree              & 5.59                   & 7.85               \\ \hline
+    Homophily                & 0.366                  & 0.710 ($\uparrow$ 96\%) \\ \hline
+    Curvature Range          & [-0.475, 0.250]        & [-0.214, 0.200]         \\ \hline
+    GCN accuracy             & 54.90\%                & 67.55\% ($\uparrow$ 12.6\%)       \\ \hline
+    GAT accuracy             & 55.88\%                & 69.12\% ($\uparrow$ 13.2\%)       \\ \hline
     \end{tabular}
-    \end{sc}
-    \end{small}
-    \end{center}
-    \vskip -0.1in
+    \label{tab:graph_comparison}
     \end{table}
-    
-    Tables contain textual material, whereas figures contain graphical material.
-    Specify the contents of each row and column in the table's topmost
-    row. Again, you may float tables to a column's top or bottom, and set
-    wide tables across both columns. Place two-column tables at the
-    top or bottom of the page.
-    
-    \subsection{Theorems and such}
-    The preferred way is to number definitions, propositions, lemmas, etc. consecutively, within sections, as shown below.
-    \begin{definition}
-    \label{def:inj}
-    A function $f:X \to Y$ is injective if for any $x,y\in X$ different, $f(x)\ne f(y)$.
-    \end{definition}
-    Using \cref{def:inj} we immediate get the following result:
-    \begin{proposition}
-    If $f$ is injective mapping a set $X$ to another set $Y$, 
-    the cardinality of $Y$ is at least as large as that of $X$
-    \end{proposition}
-    \begin{proof} 
-    Left as an exercise to the reader. 
-    \end{proof}
-    \cref{lem:usefullemma} stated next will prove to be useful.
-    \begin{lemma}
-    \label{lem:usefullemma}
-    For any $f:X \to Y$ and $g:Y\to Z$ injective functions, $f \circ g$ is injective.
-    \end{lemma}
-    \begin{theorem}
-    \label{thm:bigtheorem}
-    If $f:X\to Y$ is bijective, the cardinality of $X$ and $Y$ are the same.
-    \end{theorem}
-    An easy corollary of \cref{thm:bigtheorem} is the following:
-    \begin{corollary}
-    If $f:X\to Y$ is bijective, 
-    the cardinality of $X$ is at least as large as that of $Y$.
-    \end{corollary}
-    \begin{assumption}
-    The set $X$ is finite.
-    \label{ass:xfinite}
-    \end{assumption}
-    \begin{remark}
-    According to some, it is only the finite case (cf. \cref{ass:xfinite}) that is interesting.
-    \end{remark}
-    %restatable
 
 
+\paragraph{Conclusion}
+The Delaunay rewiring approach demonstrates significant and consistent improvements
+ on the Wisconsin dataset. The improvements are not only substantial in magnitude 
+ $(12.6-13.2\%)$ but also statistically significant, with both GCN and GAT models
+ benefiting from the rewiring. The enhanced graph properties (improved homophily 
+ and reduced negative curvature) provide structural evidence for why the approach 
+ works well. While there are some limitations and areas for future investigation, 
+ the current results strongly support the effectiveness of this approach for 
+ improving graph neural network performance.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cayley
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
