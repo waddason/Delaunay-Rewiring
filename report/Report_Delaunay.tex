@@ -33,6 +33,11 @@
 % if you use cleveref..
 \usepackage[capitalize,noabbrev]{cleveref}
 
+% control list spacing
+\usepackage{enumitem} % Recommended for better control over lists
+\setlist[itemize]{itemsep=0em} % Globally set item spacing for itemize
+\setlist[enumerate]{itemsep=0em} % Globally set item spacing for enumerate
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % THEOREMS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -196,7 +201,8 @@ or in finding the potential good ones \cite{Giraldo_2023}
 
 \subsubsection{Delaunay Triangulation}
 \paragraph{Delaunay rewiring}
-Is an extreme \textbf{4 steps rewiring} method illustrated bellow.
+Is an extreme \textbf{4 steps rewiring} method illustrated bellow and detailed 
+in \cref{alg:delaunay}:
 \begin{enumerate}
     \item A first GNN\footnote{GCN from \cite{kipf2017semi}} constructs 
         \textbf{node embeddings} from the original graph.
@@ -208,17 +214,39 @@ Is an extreme \textbf{4 steps rewiring} method illustrated bellow.
 \begin{figure}[ht!]
     \begin{center}
     \vskip -0.2in
-    \includegraphics[width=0.9\columnwidth]{figures/Rewiring_method.png}
-    %\caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
+    \includegraphics[width=0.8\columnwidth]{figures/Rewiring_method_s.png}
+    \caption{Illustration of the Delaunay [Attali al., 2024] \cite{attali2024delaunay}}
     \vskip -0.2in
     \label{fig:delaunay_rewiring}
+    
     \end{center}
-    \end{figure}
+\end{figure}
 
-% TODO 
-\paragraph{Delauynay Algorithm}
+\begin{algorithm}[htb!]
+    \caption{Delaunay Rewiring}
+    \label{alg:delaunay}
+ \begin{algorithmic}
+    \STATE {\bfseries Input:} dataset $x$, graph $G = (H_0, E)$
+    \STATE Compute node embeddings $H_1$ with GNN1 from $G$ \COMMENT{if needed}
+    \STATE Reduce  to 2D with UMAP $H_1 \to H_2$
+    \STATE Compute Delaunay triangulation $DT(H_2)$
+    \STATE $E' = \emptyset$
+    \FOR{$(i, j) \in DT(H_2).simplices$}
+        \STATE $E' = E' \cup \{(i, j)\}$  \COMMENT{Add undirected edge}
+    \ENDFOR
+    \STATE  $G' = (H_2, E')$  \COMMENT{Rewired graph}
+    \STATE Compute node embeddings $H'$ with GNN2 from $G'' = (H_0, H_2, E')$
+    {\bfseries Return:}  predicted class of nodes
+ \end{algorithmic}
+ \end{algorithm}
 
 \paragraph{GNN embedding}
+Initially, the authors triangulated the graphs considering the original 
+features. However, these starting features often lack
+expressiveness or suffer from poor quality. So they used the strategy to pass
+add the first step of GNN embedding to improve the quality of the Delaunay graph.
+In our following experiment, the intial embedding is not used as the data 
+is good enough. We did not experiment this part.
 
 
 
@@ -248,8 +276,9 @@ Does this GNN effectively captures long-range dependencies?
 We habve reproduce the rewiring experiment on the \textbf{Wisconsin dataset}\footnote{
 From WebKB dataset, 251 nodes = web pages from Wisconsin connected
 by edges = hyperlinks, node features = bag-of-words in dim 1703, labels =  5 kind of author.}.
-The report in \cref{tab:graph_comparison} demonstrate substantial improvements in graph neural network performance. The effect
+The report in \cref{tab:metric_comparison} demonstrate substantial improvements in graph neural network performance. The effect
 on of the Delaunay rewiring is clearly visible on the degree distribution in the \cref{fig:degree_dist} below.
+The curvature distribution of the edges is also shown in the \cref{fig:delaunay_curvature}.
 
 \textbf{Key Results}:
     GCN accuracy improved from $54.90\%$ to $67.55\%$ $(+12.6\%)$.
@@ -257,12 +286,12 @@ on of the Delaunay rewiring is clearly visible on the degree distribution in the
     Graph homophily increased by $96\%$ ($0.366 \to  0.718$).
     All improvements are statistically significant ($p<0.0001$).
 
-\begin{figure}[ht!]
+\begin{figure}[ht]
     \begin{tabular}{cc}
-        \includegraphics[width=0.45\columnwidth]{figures/Wisconsin_degree_distrib_original.png} &
-        \includegraphics[width=0.45\columnwidth]{figures/Wisconsin_degree_hist_original.png} \\
-        \includegraphics[width=0.45\columnwidth]{figures/baseline_degree_dist_baseline_graph_20250314_180715.png} &
-        \includegraphics[width=0.45\columnwidth]{figures/delaunay_degree_dist_delaunay_graph_20250314_180840.png}
+        \includegraphics[width=0.4\columnwidth]{figures/Wisconsin_degree_distrib_original.png} &
+        \includegraphics[width=0.4\columnwidth]{figures/Wisconsin_degree_hist_original.png} \\
+        \includegraphics[width=0.4\columnwidth]{figures/baseline_degree_dist_baseline_graph_20250314_180715.png} &
+        \includegraphics[width=0.4\columnwidth]{figures/delaunay_degree_dist_delaunay_graph_20250314_180840.png}
     \end{tabular}
     \vskip -0.2in
     \caption{Effect of the Delaunay rewiring on degree distribution. 
@@ -271,7 +300,7 @@ on of the Delaunay rewiring is clearly visible on the degree distribution in the
 \end{figure}
 
 
-\begin{table}[h!]
+\begin{table}[b]
     \caption{Comparison of Baseline and Delaunay Graph Metrics}
     \centering
     \begin{tabular}{|l|c|c|}
@@ -281,12 +310,25 @@ on of the Delaunay rewiring is clearly visible on the degree distribution in the
         Homophily                & 0.366                  & 0.710 ($\uparrow$ 96\%) \\ \hline
         Curvature Range          & [-0.475, 0.250]        & [-0.214, 0.200]         \\ \hline
     \end{tabular}
-    \label{tab:graph_comparison}
+    \label{tab:metric_comparison}
 \end{table}
     
 \textbf{Impact}: The Delaunay rewiring approach successfully addresses 
 over-squashing and improves graph structure, leading to significant performance 
 gains across different model architectures.
+
+\begin{figure}[htb]
+    \begin{center}
+        \begin{tabular}{cc}
+            \includegraphics[width=0.4\columnwidth]{figures/baseline_curvature_dist_baseline_graph_20250321_203836.png}&
+            \includegraphics[width=0.4\columnwidth]{figures/delaunay_curvature_dist_delaunay_graph_20250321_204407.png}
+        \end{tabular}
+    \vskip -0.2in
+    \caption{Evolution of the curvature distribution of nodes after rewiring (right).
+    We can confirm that the amplitude of the curvature has decreased.}
+    \label{fig:delaunay_curvature}
+    \end{center}
+\end{figure}
 
 \textbf{Validation}: Results are robust across multiple experiments and 
 statistically significant, with comprehensive analysis of graph properties
@@ -342,8 +384,8 @@ structure to ameliorate the over-squashing effect.
 % TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Choice explanation}
-We have chosen this paper because it follows the exact same idea of rewiring
-the initial graph using a mathematical structure. The Delaunay Triangulation
+We have chosen this paper because it follows the exact same idea of \textbf{rewiring
+the initial graph using a mathematical structure}. The Delaunay Triangulation
 on the first side used geometric properties. The Cayley graph on the second side
 is a mathematical structure that can be used to represent a group. It seems
 to us that the two methods are competitive and complementary. The two papers
@@ -352,17 +394,17 @@ are from 2024 and does not refer to each other.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Paper summary}
 \cite{wilson2024cayleygraphpropagation} focuses on the over-squashing effect.
-Their aim is to precompute bottleneck-free graph structures to alleviate the
+Their aim is to \textbf{precompute bottleneck-free graph structures} to alleviate the
 over-squashing effect. They propose the use of a well-known \textbf{expander graph} family:
 the Cayley graphs of the $\text{SL}(2,\mathbb{Z}_n)$ special linear group as a computational template for GNNs.
 
 They have improved previous work already used this family that required to 
-truncate the graph to align with the input graph. They show that truncation is
+truncate the graph to align with the input graph. The authors show that truncation is
 not necessary and that the complete Cayley graph can be used directly with 
 the direct effect of reducing the diameter of the graph as illustrated in the \cref{fig:cayley_graph}.
 
 
-\begin{figure}[ht!]
+\begin{figure}[htb!]
     \begin{center}
         \begin{tabular}{cc}
             \includegraphics[width=0.4\columnwidth]{figures/Cayley1.png}&
@@ -386,6 +428,30 @@ The spectral gap is the difference between the first and second normalized eigen
 \subsection{Comparison}
 
 
+The constructed Cayley graph with $|V|$ nodes has a low diameter, requiring only
+$\mathcal{O}(log(|V(G)|)$ steps to globally propagate information. This enhances
+its ability to eliminate over-squashing and bottlenecks, which is further 
+supported by having a higher spectral gap.
+
+But this construction requires to add new nodes into the graph; hence, we need to modify the feature
+matrix into an extended version, $\mathbf{X}' \in \mathbb{R}^{(|V| + virt)| \times d}$.
+The first $|V|$ nodes are featured using the data from $\mathbf{X}$, the vitrual 
+ones are initialized as zeros.
+
+
+Furthermore, this new method does not suffer from limitations of the Cayley graph construction:
+the inability to find the best way to align it to a given input graph, mitigating the potential for
+stochastic effects in the process. The additional virtual nodes act as “bridges” between poorly
+connected communities in the Cayley graph, ameliorating any poorly-connected regions caused by
+misalignment: see how the former red string in now connected in the \cref{fig:cayley_graph}.
+However, the absence of curvature metrics in the Cayley graph makes it difficult to compare the two methods
+on the over-smoothing factor.
+
+As a conclusion, we were not able to conduct the experiment on the Cayley graph
+on the same Wisconsin dataset. Furthermore the datasets used on the two papers are distinct.
+Hence, we are unable to compare the two methods directly. However, we can see that the two methods
+use different mathematical structures to achieve the same goal: improving the graph structure
+by improving the connectivity between nodes.
 
 
 
@@ -444,7 +510,7 @@ It is a well-known method in computational geometry and has been used in various
     \center
 
     \includegraphics[width=0.9\textwidth]{figures/delaunay_process.png}
-    \caption{Illustration of the Delaynay rewiring process in a 2-dimension feature space.}
+    \caption{Illustration of the Delaunay rewiring process in a 2-dimension feature space.}
     \label{fig:delaunay_full}
 \end{figure}
 \begin{definition}
