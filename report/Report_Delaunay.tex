@@ -192,7 +192,7 @@ the input graph to minimize structural bottlenecks.
 First ones rely on the analysis of the graph structure, through local or global features
 like edge curvature or resistance. However, these methods may not scale well with 
 the number of nodes and need depends on the choice of hyperparameters. 
-Moreovoer, they modify the original graph, which is not always available in some applications.
+Moreover, they modify the original graph, which is not always available in some applications.
 
 Conversely, over-smoothing is avoided by preventing embedding to become the same 
 through: \textbf{Normalization} with PairNorm \cite{zhao2020pairnorm}; 
@@ -207,7 +207,7 @@ in \cref{alg:delaunay}:
     \item A first GNN\footnote{GCN from \cite{kipf2017semi}} constructs 
         \textbf{node embeddings} from the original graph.
     \item Reduce the embedding with \textbf{UMAP} in dim 2.
-    \item \textbf{Rebuilt edges with Delaunay triangulation} from their distance in UMAP embedding space.
+    \item \textbf{Rebuild edges with Delaunay triangulation} from their distance in UMAP embedding space.
     \item Second GNN \textbf{mix} the Delaunay graph with the original features 
     from the beginning.
 \end{enumerate}
@@ -252,7 +252,7 @@ is good enough. We did not experiment this part.
 
 
 
-\paragraph{Initial throughts}
+\paragraph{Initial thoughts}
 The method is remarkably simple, as it does not require any hyperparameters according to authors, 
 which eliminates the need for a grid search. Its computational complexity is 
 efficient, scaling as $\mathcal{O} \big( N \log N \big)$. 
@@ -273,11 +273,11 @@ Does this GNN effectively captures long-range dependencies?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experiments}
-We habve reproduce the rewiring experiment on the \textbf{Wisconsin dataset}\footnote{
+We have reproduced the rewiring experiment on the \textbf{Wisconsin dataset}\footnote{
 From WebKB dataset, 251 nodes = web pages from Wisconsin connected
 by edges = hyperlinks, node features = bag-of-words in dim 1703, labels =  5 kind of author.}.
 The report in \cref{tab:metric_comparison} demonstrate substantial improvements in graph neural network performance. The effect
-on of the Delaunay rewiring is clearly visible on the degree distribution in the \cref{fig:degree_dist} below.
+of the Delaunay rewiring is clearly visible on the degree distribution in the \cref{fig:degree_dist} below.
 The curvature distribution of the edges is also shown in the \cref{fig:delaunay_curvature}.
 
 \textbf{Key Results}:
@@ -346,7 +346,7 @@ during the UMAP reduction to 2 dimensions. The quality of Delaunay graph depends
  computation can cause overhead, but this is way better than the quadratic cost
  of other methods.
    
-\paragraph{Parameter Sensitivity} We do not totally agree with the authors as
+\paragraph{Parameter Sensitivity} We do not entirely agree with the authors as
 we find out that the impact of UMAP parameters not fully explored. They could
 modulate the quality of the embedding we already discussed. Moreover, the
 potential dependence on feature normalization and the effect of different
@@ -376,7 +376,7 @@ If we were to work further in this topic, we could focus on:
 % Other paper
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Additional Paper}
-We have chosen to dig into another rewiring method proposed by \cite{wilson2024cayleygraphpropagation}
+We have chosen to delve into another rewiring method proposed by \cite{wilson2024cayleygraphpropagation}
 based on Cayley graphs, named \textbf{Cayley Graph Propagation}. 
 The authors have focus on the creation of bottleneck-free
 structure to ameliorate the over-squashing effect. 
@@ -384,12 +384,12 @@ structure to ameliorate the over-squashing effect.
 % TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Choice explanation}
-We have chosen this paper because it follows the exact same idea of \textbf{rewiring
-the initial graph using a mathematical structure}. The Delaunay Triangulation
-on the first side used geometric properties. The Cayley graph on the second side
-is a mathematical structure that can be used to represent a group. It seems
-to us that the two methods are competitive and complementary. The two papers
-are from 2024 and does not refer to each other.
+We selected this paper because it aligns with the concept of \textbf{rewiring
+the initial graph using a mathematical structure}.
+On one hand, Delaunay Triangulation leverages geometric properties. 
+On the other hand, the Cayley graph is a mathematical structure that can represent a group.
+We believe these two methods are both competitive and complementary.
+Notably, both papers were published in 2024 and do not reference each other.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Paper summary}
