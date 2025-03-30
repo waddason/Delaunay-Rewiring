@@ -1,0 +1,108 @@
+2025-03-31 00:34:20,771 - INFO - Using device: cuda
+2025-03-31 00:34:20,771 - INFO - 
+Running original experiment...
+2025-03-31 00:34:20,783 - INFO - Dataset loaded: 188 graphs
+2025-03-31 00:34:20,783 - INFO - Split seed: 42
+2025-03-31 00:34:23,236 - INFO - Split 42 - Epoch 20: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.7000, Loss = 0.3786
+2025-03-31 00:34:24,643 - INFO - Split 42 - Epoch 40: Train Acc = 0.8600, Val Acc = 0.8889, Test Acc = 0.7000, Loss = 0.3020
+2025-03-31 00:34:26,010 - INFO - Split 42 - Epoch 60: Train Acc = 0.8667, Val Acc = 0.8889, Test Acc = 0.8500, Loss = 0.2842
+2025-03-31 00:34:26,637 - INFO - Split seed: 123
+2025-03-31 00:34:27,746 - INFO - Split 123 - Epoch 20: Train Acc = 0.8400, Val Acc = 0.8889, Test Acc = 0.9000, Loss = 0.4072
+2025-03-31 00:34:28,797 - INFO - Split 123 - Epoch 40: Train Acc = 0.8467, Val Acc = 0.9444, Test Acc = 0.9500, Loss = 0.3374
+2025-03-31 00:34:29,900 - INFO - Split 123 - Epoch 60: Train Acc = 0.8200, Val Acc = 0.8889, Test Acc = 0.9500, Loss = 0.3445
+2025-03-31 00:34:31,046 - INFO - Split seed: 456
+2025-03-31 00:34:32,348 - INFO - Split 456 - Epoch 20: Train Acc = 0.8400, Val Acc = 0.8333, Test Acc = 0.9000, Loss = 0.4005
+2025-03-31 00:34:33,705 - INFO - Split 456 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.7222, Test Acc = 0.8500, Loss = 0.2839
+2025-03-31 00:34:34,814 - INFO - Split 456 - Epoch 60: Train Acc = 0.8933, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.2351
+2025-03-31 00:34:35,734 - INFO - Split seed: 789
+2025-03-31 00:34:37,763 - INFO - Split 789 - Epoch 20: Train Acc = 0.8467, Val Acc = 0.7778, Test Acc = 0.8000, Loss = 0.4130
+2025-03-31 00:34:39,895 - INFO - Split 789 - Epoch 40: Train Acc = 0.8467, Val Acc = 0.6667, Test Acc = 0.9000, Loss = 0.3371
+2025-03-31 00:34:41,493 - INFO - Split 789 - Epoch 60: Train Acc = 0.8867, Val Acc = 0.7778, Test Acc = 0.9500, Loss = 0.3063
+2025-03-31 00:34:42,249 - INFO - Split seed: 101112
+2025-03-31 00:34:43,922 - INFO - Split 101112 - Epoch 20: Train Acc = 0.8467, Val Acc = 0.8333, Test Acc = 0.8000, Loss = 0.3815
+2025-03-31 00:34:45,476 - INFO - Split 101112 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.8333, Test Acc = 0.8000, Loss = 0.2972
+2025-03-31 00:34:47,015 - INFO - Split 101112 - Epoch 60: Train Acc = 0.9000, Val Acc = 0.8889, Test Acc = 0.8500, Loss = 0.2953
+2025-03-31 00:34:48,892 - INFO - Split 101112 - Epoch 80: Train Acc = 0.8933, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.2566
+2025-03-31 00:34:50,263 - INFO - original final: 0.8200 ± 0.1030
+2025-03-31 00:34:50,263 - INFO - Average convergence epoch: 76.6
+2025-03-31 00:34:50,263 - INFO - Average best epoch: 27.0
+2025-03-31 00:34:50,263 - INFO - 
+Running EGP experiment...
+2025-03-31 00:34:50,267 - INFO - Dataset loaded: 188 graphs
+2025-03-31 00:34:50,268 - INFO - Split seed: 42
+2025-03-31 00:34:52,252 - INFO - Split 42 - Epoch 20: Train Acc = 0.8467, Val Acc = 0.7778, Test Acc = 0.8000, Loss = 0.3654
+2025-03-31 00:34:54,086 - INFO - Split 42 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.8000, Loss = 0.3109
+2025-03-31 00:34:56,177 - INFO - Split 42 - Epoch 60: Train Acc = 0.8867, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.3065
+2025-03-31 00:34:58,049 - INFO - Split seed: 123
+2025-03-31 00:34:59,989 - INFO - Split 123 - Epoch 20: Train Acc = 0.8400, Val Acc = 0.9444, Test Acc = 0.9000, Loss = 0.4034
+2025-03-31 00:35:02,098 - INFO - Split 123 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.9444, Test Acc = 0.9000, Loss = 0.3331
+2025-03-31 00:35:03,993 - INFO - Split seed: 456
+2025-03-31 00:35:06,329 - INFO - Split 456 - Epoch 20: Train Acc = 0.8533, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.4163
+2025-03-31 00:35:08,625 - INFO - Split 456 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.8500, Loss = 0.2992
+2025-03-31 00:35:11,189 - INFO - Split 456 - Epoch 60: Train Acc = 0.8800, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.2759
+2025-03-31 00:35:12,568 - INFO - Split seed: 789
+2025-03-31 00:35:14,940 - INFO - Split 789 - Epoch 20: Train Acc = 0.8200, Val Acc = 0.6111, Test Acc = 0.8500, Loss = 0.4176
+2025-03-31 00:35:18,307 - INFO - Split 789 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.6667, Test Acc = 0.9000, Loss = 0.3231
+2025-03-31 00:35:20,728 - INFO - Split 789 - Epoch 60: Train Acc = 0.8533, Val Acc = 0.5556, Test Acc = 0.8500, Loss = 0.3598
+2025-03-31 00:35:22,818 - INFO - Split 789 - Epoch 80: Train Acc = 0.8600, Val Acc = 0.8889, Test Acc = 0.9500, Loss = 0.2849
+2025-03-31 00:35:25,245 - INFO - Split 789 - Epoch 100: Train Acc = 0.9200, Val Acc = 0.7778, Test Acc = 0.9500, Loss = 0.2224
+2025-03-31 00:35:27,220 - INFO - Split 789 - Epoch 120: Train Acc = 0.9267, Val Acc = 0.7222, Test Acc = 0.9500, Loss = 0.2247
+2025-03-31 00:35:28,362 - INFO - Split seed: 101112
+2025-03-31 00:35:30,033 - INFO - Split 101112 - Epoch 20: Train Acc = 0.8667, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.3502
+2025-03-31 00:35:31,813 - INFO - Split 101112 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.7222, Test Acc = 0.8500, Loss = 0.2832
+2025-03-31 00:35:34,025 - INFO - EGP final: 0.8700 ± 0.0400
+2025-03-31 00:35:34,025 - INFO - Average convergence epoch: 75.4
+2025-03-31 00:35:34,025 - INFO - Average best epoch: 28.2
+2025-03-31 00:35:34,025 - INFO - 
+Running CGP experiment...
+2025-03-31 00:35:34,037 - INFO - Dataset loaded: 188 graphs
+2025-03-31 00:35:34,037 - INFO - Split seed: 42
+2025-03-31 00:35:37,255 - INFO - Split 42 - Epoch 20: Train Acc = 0.8733, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.2974
+2025-03-31 00:35:39,805 - INFO - Split 42 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.2585
+2025-03-31 00:35:42,479 - INFO - Split 42 - Epoch 60: Train Acc = 0.9067, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.2358
+2025-03-31 00:35:42,823 - INFO - Split seed: 123
+2025-03-31 00:35:45,176 - INFO - Split 123 - Epoch 20: Train Acc = 0.8467, Val Acc = 0.9444, Test Acc = 0.9000, Loss = 0.3483
+2025-03-31 00:35:47,654 - INFO - Split 123 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.9444, Test Acc = 0.8500, Loss = 0.3583
+2025-03-31 00:35:49,036 - INFO - Split seed: 456
+2025-03-31 00:35:51,157 - INFO - Split 456 - Epoch 20: Train Acc = 0.8667, Val Acc = 0.7778, Test Acc = 0.8500, Loss = 0.3087
+2025-03-31 00:35:53,215 - INFO - Split 456 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.2877
+2025-03-31 00:35:55,049 - INFO - Split seed: 789
+2025-03-31 00:35:57,257 - INFO - Split 789 - Epoch 20: Train Acc = 0.8867, Val Acc = 0.7222, Test Acc = 0.9000, Loss = 0.3115
+2025-03-31 00:35:59,466 - INFO - Split 789 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.7778, Test Acc = 1.0000, Loss = 0.2606
+2025-03-31 00:36:01,646 - INFO - Split 789 - Epoch 60: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.2836
+2025-03-31 00:36:03,776 - INFO - Split 789 - Epoch 80: Train Acc = 0.8933, Val Acc = 0.8889, Test Acc = 0.9000, Loss = 0.2686
+2025-03-31 00:36:04,468 - INFO - Split seed: 101112
+2025-03-31 00:36:06,619 - INFO - Split 101112 - Epoch 20: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.8500, Loss = 0.2896
+2025-03-31 00:36:08,672 - INFO - Split 101112 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.2541
+2025-03-31 00:36:10,514 - INFO - CGP final: 0.8400 ± 0.0583
+2025-03-31 00:36:10,514 - INFO - Average convergence epoch: 62.2
+2025-03-31 00:36:10,514 - INFO - Average best epoch: 12.2
+2025-03-31 00:36:10,514 - INFO - 
+Running delaunay experiment...
+2025-03-31 00:36:10,521 - INFO - Dataset loaded: 188 graphs
+2025-03-31 00:36:10,521 - INFO - Split seed: 42
+2025-03-31 00:36:25,017 - INFO - Split 42 - Epoch 20: Train Acc = 0.8200, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.4138
+2025-03-31 00:36:28,616 - INFO - Split 42 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.3032
+2025-03-31 00:36:32,334 - INFO - Split 42 - Epoch 60: Train Acc = 0.8867, Val Acc = 0.7778, Test Acc = 0.8500, Loss = 0.3081
+2025-03-31 00:36:32,882 - INFO - Split seed: 123
+2025-03-31 00:36:36,658 - INFO - Split 123 - Epoch 20: Train Acc = 0.8000, Val Acc = 0.8333, Test Acc = 0.9000, Loss = 0.4218
+2025-03-31 00:36:40,404 - INFO - Split 123 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.8889, Test Acc = 0.8500, Loss = 0.3534
+2025-03-31 00:36:43,411 - INFO - Split seed: 456
+2025-03-31 00:36:47,472 - INFO - Split 456 - Epoch 20: Train Acc = 0.8600, Val Acc = 0.8333, Test Acc = 0.8000, Loss = 0.3619
+2025-03-31 00:36:51,252 - INFO - Split 456 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.8333, Test Acc = 0.8500, Loss = 0.3382
+2025-03-31 00:36:54,909 - INFO - Split 456 - Epoch 60: Train Acc = 0.8933, Val Acc = 0.8333, Test Acc = 0.8000, Loss = 0.2702
+2025-03-31 00:36:56,298 - INFO - Split seed: 789
+2025-03-31 00:37:00,135 - INFO - Split 789 - Epoch 20: Train Acc = 0.8667, Val Acc = 0.6667, Test Acc = 1.0000, Loss = 0.3599
+2025-03-31 00:37:03,801 - INFO - Split 789 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.6111, Test Acc = 1.0000, Loss = 0.3140
+2025-03-31 00:37:06,949 - INFO - Split seed: 101112
+2025-03-31 00:37:10,796 - INFO - Split 101112 - Epoch 20: Train Acc = 0.8267, Val Acc = 0.6667, Test Acc = 0.9000, Loss = 0.4262
+2025-03-31 00:37:14,500 - INFO - Split 101112 - Epoch 40: Train Acc = 0.8600, Val Acc = 0.7778, Test Acc = 0.9000, Loss = 0.3391
+2025-03-31 00:37:16,904 - INFO - delaunay final: 0.8900 ± 0.0583
+2025-03-31 00:37:16,905 - INFO - Average convergence epoch: 58.2
+2025-03-31 00:37:16,905 - INFO - Average best epoch: 8.2
+2025-03-31 00:37:16,905 - INFO - 
+Final Results:
+2025-03-31 00:37:16,905 - INFO - original: 0.8200 ± 0.1030
+2025-03-31 00:37:16,905 - INFO - EGP: 0.8700 ± 0.0400
+2025-03-31 00:37:16,905 - INFO - CGP: 0.8400 ± 0.0583
+2025-03-31 00:37:16,905 - INFO - delaunay: 0.8900 ± 0.0583
