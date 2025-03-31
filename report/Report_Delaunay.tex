@@ -447,13 +447,16 @@ misalignment: see how the former red string in now connected in the \cref{fig:ca
 However, the absence of curvature metrics in the Cayley graph makes it difficult to compare the two methods
 on the over-smoothing factor.
 
-As a conclusion, we were not able to conduct the experiment on the Cayley graph
-on the same Wisconsin dataset. Furthermore the datasets used on the two papers are distinct.
-Hence, we are unable to compare the two methods directly. However, we can see that the two methods
-use different mathematical structures to achieve the same goal: improving the graph structure
-by improving the connectivity between nodes.
 
-
+To compare these methods, we evaluated both approaches on the MUTAG dataset, 
+a binary graph classification task containing $188$ molecular graphs. Using 
+a $4$-layer GIN architecture with batch normalization and $5$-fold stratified 
+cross-validation, we assessed each method's ability to preserve and leverage molecular 
+graph structure. While CGP achieved strong performance ($92.01\% \pm 3.80\%$), 
+Delaunay rewiring showed lower accuracy ($88.31\% \pm 2.64\%$), likely due to 
+information loss during the dimensional reduction step. This suggests that preserving 
+graph topology through virtual nodes, as in CGP, might be more effective than 
+complete geometric rewiring for molecular property prediction tasks.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

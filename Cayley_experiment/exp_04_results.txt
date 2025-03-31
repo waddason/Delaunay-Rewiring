@@ -1,0 +1,158 @@
+2025-03-31 16:38:03,428 - INFO - Using device: cuda
+2025-03-31 16:38:03,428 - INFO - 
+Running original experiment...
+2025-03-31 16:38:03,432 - INFO - Dataset loaded: 188 graphs
+2025-03-31 16:38:03,457 - INFO - 
+Fold 1/5
+2025-03-31 16:38:05,540 - INFO - Fold 1 - Epoch 20: Train Acc = 0.8333, Val Acc = 0.8947, Loss = 0.4182
+2025-03-31 16:38:07,030 - INFO - Fold 1 - Epoch 40: Train Acc = 0.8933, Val Acc = 0.8684, Loss = 0.2901
+2025-03-31 16:38:09,073 - INFO - Fold 1 - Epoch 60: Train Acc = 0.9000, Val Acc = 0.8158, Loss = 0.2413
+2025-03-31 16:38:10,594 - INFO - Fold 1 validation accuracy: 0.9211
+2025-03-31 16:38:10,595 - INFO - 
+Fold 2/5
+2025-03-31 16:38:12,061 - INFO - Fold 2 - Epoch 20: Train Acc = 0.8533, Val Acc = 0.8421, Loss = 0.3892
+2025-03-31 16:38:13,628 - INFO - Fold 2 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.9211, Loss = 0.3393
+2025-03-31 16:38:15,268 - INFO - Fold 2 - Epoch 60: Train Acc = 0.8400, Val Acc = 0.9211, Loss = 0.2788
+2025-03-31 16:38:16,257 - INFO - Fold 2 validation accuracy: 0.9211
+2025-03-31 16:38:16,258 - INFO - 
+Fold 3/5
+2025-03-31 16:38:17,733 - INFO - Fold 3 - Epoch 20: Train Acc = 0.8267, Val Acc = 0.8421, Loss = 0.3801
+2025-03-31 16:38:19,157 - INFO - Fold 3 - Epoch 40: Train Acc = 0.8800, Val Acc = 0.8947, Loss = 0.3015
+2025-03-31 16:38:20,683 - INFO - Fold 3 - Epoch 60: Train Acc = 0.8867, Val Acc = 0.9211, Loss = 0.2881
+2025-03-31 16:38:22,176 - INFO - Fold 3 - Epoch 80: Train Acc = 0.9200, Val Acc = 0.8684, Loss = 0.2385
+2025-03-31 16:38:22,427 - INFO - Fold 3 validation accuracy: 0.9474
+2025-03-31 16:38:22,427 - INFO - 
+Fold 4/5
+2025-03-31 16:38:24,067 - INFO - Fold 4 - Epoch 20: Train Acc = 0.7947, Val Acc = 0.8108, Loss = 0.4163
+2025-03-31 16:38:25,798 - INFO - Fold 4 - Epoch 40: Train Acc = 0.8874, Val Acc = 0.8378, Loss = 0.2964
+2025-03-31 16:38:27,426 - INFO - Fold 4 validation accuracy: 0.8649
+2025-03-31 16:38:27,427 - INFO - 
+Fold 5/5
+2025-03-31 16:38:28,979 - INFO - Fold 5 - Epoch 20: Train Acc = 0.8278, Val Acc = 0.7838, Loss = 0.4210
+2025-03-31 16:38:30,471 - INFO - Fold 5 - Epoch 40: Train Acc = 0.8543, Val Acc = 0.8108, Loss = 0.3599
+2025-03-31 16:38:31,881 - INFO - Fold 5 - Epoch 60: Train Acc = 0.8940, Val Acc = 0.8378, Loss = 0.2848
+2025-03-31 16:38:32,108 - INFO - Fold 5 validation accuracy: 0.8378
+2025-03-31 16:38:32,108 - INFO - 
+Cross-validation results:
+2025-03-31 16:38:32,108 - INFO - Mean accuracy: 0.8984 ± 0.0405
+2025-03-31 16:38:32,109 - INFO - 
+Running EGP experiment...
+2025-03-31 16:38:32,112 - INFO - Dataset loaded: 188 graphs
+2025-03-31 16:38:32,135 - INFO - 
+Fold 1/5
+2025-03-31 16:38:33,635 - INFO - Fold 1 - Epoch 20: Train Acc = 0.8067, Val Acc = 0.7895, Loss = 0.4589
+2025-03-31 16:38:35,275 - INFO - Fold 1 - Epoch 40: Train Acc = 0.8467, Val Acc = 0.8158, Loss = 0.3059
+2025-03-31 16:38:36,842 - INFO - Fold 1 - Epoch 60: Train Acc = 0.8800, Val Acc = 0.8684, Loss = 0.2710
+2025-03-31 16:38:37,959 - INFO - Fold 1 validation accuracy: 0.8947
+2025-03-31 16:38:37,959 - INFO - 
+Fold 2/5
+2025-03-31 16:38:39,511 - INFO - Fold 2 - Epoch 20: Train Acc = 0.8200, Val Acc = 0.8158, Loss = 0.3854
+2025-03-31 16:38:41,040 - INFO - Fold 2 - Epoch 40: Train Acc = 0.8267, Val Acc = 0.8421, Loss = 0.3767
+2025-03-31 16:38:42,512 - INFO - Fold 2 - Epoch 60: Train Acc = 0.8467, Val Acc = 0.8421, Loss = 0.3349
+2025-03-31 16:38:42,744 - INFO - Fold 2 validation accuracy: 0.8684
+2025-03-31 16:38:42,744 - INFO - 
+Fold 3/5
+2025-03-31 16:38:44,217 - INFO - Fold 3 - Epoch 20: Train Acc = 0.7800, Val Acc = 0.8158, Loss = 0.4477
+2025-03-31 16:38:45,740 - INFO - Fold 3 - Epoch 40: Train Acc = 0.8733, Val Acc = 0.8421, Loss = 0.3172
+2025-03-31 16:38:47,593 - INFO - Fold 3 - Epoch 60: Train Acc = 0.9133, Val Acc = 0.9211, Loss = 0.2472
+2025-03-31 16:38:49,439 - INFO - Fold 3 - Epoch 80: Train Acc = 0.8600, Val Acc = 0.8947, Loss = 0.2989
+2025-03-31 16:38:51,234 - INFO - Fold 3 - Epoch 100: Train Acc = 0.8800, Val Acc = 0.9211, Loss = 0.2773
+2025-03-31 16:38:52,170 - INFO - Fold 3 validation accuracy: 0.9211
+2025-03-31 16:38:52,170 - INFO - 
+Fold 4/5
+2025-03-31 16:38:54,168 - INFO - Fold 4 - Epoch 20: Train Acc = 0.8411, Val Acc = 0.8378, Loss = 0.4233
+2025-03-31 16:38:55,868 - INFO - Fold 4 - Epoch 40: Train Acc = 0.8675, Val Acc = 0.8378, Loss = 0.3025
+2025-03-31 16:38:57,528 - INFO - Fold 4 - Epoch 60: Train Acc = 0.8278, Val Acc = 0.8378, Loss = 0.3928
+2025-03-31 16:38:58,074 - INFO - Fold 4 validation accuracy: 0.8919
+2025-03-31 16:38:58,074 - INFO - 
+Fold 5/5
+2025-03-31 16:38:59,755 - INFO - Fold 5 - Epoch 20: Train Acc = 0.8079, Val Acc = 0.8919, Loss = 0.4362
+2025-03-31 16:39:01,447 - INFO - Fold 5 - Epoch 40: Train Acc = 0.8477, Val Acc = 0.8378, Loss = 0.3342
+2025-03-31 16:39:03,156 - INFO - Fold 5 - Epoch 60: Train Acc = 0.8742, Val Acc = 0.8108, Loss = 0.3253
+2025-03-31 16:39:03,914 - INFO - Fold 5 validation accuracy: 0.9189
+2025-03-31 16:39:03,914 - INFO - 
+Cross-validation results:
+2025-03-31 16:39:03,914 - INFO - Mean accuracy: 0.8990 ± 0.0194
+2025-03-31 16:39:03,915 - INFO - 
+Running CGP experiment...
+2025-03-31 16:39:03,918 - INFO - Dataset loaded: 188 graphs
+2025-03-31 16:39:03,952 - INFO - 
+Fold 1/5
+2025-03-31 16:39:06,036 - INFO - Fold 1 - Epoch 20: Train Acc = 0.8600, Val Acc = 0.8947, Loss = 0.2928
+2025-03-31 16:39:08,015 - INFO - Fold 1 - Epoch 40: Train Acc = 0.9067, Val Acc = 0.8684, Loss = 0.2637
+2025-03-31 16:39:10,003 - INFO - Fold 1 - Epoch 60: Train Acc = 0.8733, Val Acc = 0.8421, Loss = 0.2648
+2025-03-31 16:39:10,714 - INFO - Fold 1 validation accuracy: 0.9211
+2025-03-31 16:39:10,715 - INFO - 
+Fold 2/5
+2025-03-31 16:39:12,784 - INFO - Fold 2 - Epoch 20: Train Acc = 0.8467, Val Acc = 0.8421, Loss = 0.3071
+2025-03-31 16:39:14,872 - INFO - Fold 2 - Epoch 40: Train Acc = 0.8667, Val Acc = 0.8947, Loss = 0.2941
+2025-03-31 16:39:16,959 - INFO - Fold 2 - Epoch 60: Train Acc = 0.8333, Val Acc = 0.8684, Loss = 0.3804
+2025-03-31 16:39:19,204 - INFO - Fold 2 - Epoch 80: Train Acc = 0.8867, Val Acc = 0.8684, Loss = 0.2594
+2025-03-31 16:39:20,333 - INFO - Fold 2 validation accuracy: 0.8947
+2025-03-31 16:39:20,333 - INFO - 
+Fold 3/5
+2025-03-31 16:39:22,479 - INFO - Fold 3 - Epoch 20: Train Acc = 0.8333, Val Acc = 0.8421, Loss = 0.3141
+2025-03-31 16:39:24,350 - INFO - Fold 3 - Epoch 40: Train Acc = 0.8600, Val Acc = 0.8421, Loss = 0.3067
+2025-03-31 16:39:26,163 - INFO - Fold 3 - Epoch 60: Train Acc = 0.8467, Val Acc = 0.8947, Loss = 0.3447
+2025-03-31 16:39:28,056 - INFO - Fold 3 - Epoch 80: Train Acc = 0.9067, Val Acc = 0.9211, Loss = 0.2261
+2025-03-31 16:39:30,005 - INFO - Fold 3 - Epoch 100: Train Acc = 0.8800, Val Acc = 0.9737, Loss = 0.2847
+2025-03-31 16:39:31,771 - INFO - Fold 3 - Epoch 120: Train Acc = 0.9133, Val Acc = 0.9737, Loss = 0.2287
+2025-03-31 16:39:33,601 - INFO - Fold 3 - Epoch 140: Train Acc = 0.8600, Val Acc = 0.9737, Loss = 0.2609
+2025-03-31 16:39:34,566 - INFO - Fold 3 validation accuracy: 0.9737
+2025-03-31 16:39:34,566 - INFO - 
+Fold 4/5
+2025-03-31 16:39:36,378 - INFO - Fold 4 - Epoch 20: Train Acc = 0.8477, Val Acc = 0.8108, Loss = 0.3497
+2025-03-31 16:39:38,152 - INFO - Fold 4 - Epoch 40: Train Acc = 0.8742, Val Acc = 0.8378, Loss = 0.2895
+2025-03-31 16:39:39,897 - INFO - Fold 4 - Epoch 60: Train Acc = 0.9073, Val Acc = 0.8378, Loss = 0.2541
+2025-03-31 16:39:41,769 - INFO - Fold 4 - Epoch 80: Train Acc = 0.8874, Val Acc = 0.8108, Loss = 0.2678
+2025-03-31 16:39:42,152 - INFO - Fold 4 validation accuracy: 0.8649
+2025-03-31 16:39:42,152 - INFO - 
+Fold 5/5
+2025-03-31 16:39:43,928 - INFO - Fold 5 - Epoch 20: Train Acc = 0.8344, Val Acc = 0.9189, Loss = 0.3731
+2025-03-31 16:39:45,885 - INFO - Fold 5 - Epoch 40: Train Acc = 0.8411, Val Acc = 0.9189, Loss = 0.3204
+2025-03-31 16:39:47,773 - INFO - Fold 5 - Epoch 60: Train Acc = 0.8675, Val Acc = 0.9189, Loss = 0.2923
+2025-03-31 16:39:49,620 - INFO - Fold 5 - Epoch 80: Train Acc = 0.9073, Val Acc = 0.9189, Loss = 0.2577
+2025-03-31 16:39:49,834 - INFO - Fold 5 validation accuracy: 0.9459
+2025-03-31 16:39:49,835 - INFO - 
+Cross-validation results:
+2025-03-31 16:39:49,835 - INFO - Mean accuracy: 0.9201 ± 0.0380
+2025-03-31 16:39:49,835 - INFO - 
+Running delaunay experiment...
+2025-03-31 16:39:49,840 - INFO - Dataset loaded: 188 graphs
+2025-03-31 16:40:00,250 - INFO - 
+Fold 1/5
+2025-03-31 16:40:03,715 - INFO - Fold 1 - Epoch 20: Train Acc = 0.8400, Val Acc = 0.8421, Loss = 0.4181
+2025-03-31 16:40:07,160 - INFO - Fold 1 - Epoch 40: Train Acc = 0.8600, Val Acc = 0.7895, Loss = 0.3496
+2025-03-31 16:40:10,628 - INFO - Fold 1 - Epoch 60: Train Acc = 0.9267, Val Acc = 0.7895, Loss = 0.2532
+2025-03-31 16:40:11,667 - INFO - Fold 1 validation accuracy: 0.8684
+2025-03-31 16:40:11,667 - INFO - 
+Fold 2/5
+2025-03-31 16:40:15,267 - INFO - Fold 2 - Epoch 20: Train Acc = 0.8133, Val Acc = 0.8947, Loss = 0.4085
+2025-03-31 16:40:18,636 - INFO - Fold 2 - Epoch 40: Train Acc = 0.8000, Val Acc = 0.8947, Loss = 0.4081
+2025-03-31 16:40:21,995 - INFO - Fold 2 - Epoch 60: Train Acc = 0.8533, Val Acc = 0.8947, Loss = 0.3414
+2025-03-31 16:40:22,386 - INFO - Fold 2 validation accuracy: 0.9211
+2025-03-31 16:40:22,386 - INFO - 
+Fold 3/5
+2025-03-31 16:40:26,080 - INFO - Fold 3 - Epoch 20: Train Acc = 0.8733, Val Acc = 0.8158, Loss = 0.3451
+2025-03-31 16:40:29,643 - INFO - Fold 3 - Epoch 40: Train Acc = 0.8600, Val Acc = 0.7895, Loss = 0.3242
+2025-03-31 16:40:33,341 - INFO - Fold 3 - Epoch 60: Train Acc = 0.8533, Val Acc = 0.8158, Loss = 0.3061
+2025-03-31 16:40:35,109 - INFO - Fold 3 validation accuracy: 0.8421
+2025-03-31 16:40:35,110 - INFO - 
+Fold 4/5
+2025-03-31 16:40:39,510 - INFO - Fold 4 - Epoch 20: Train Acc = 0.8278, Val Acc = 0.8108, Loss = 0.3728
+2025-03-31 16:40:43,229 - INFO - Fold 4 - Epoch 40: Train Acc = 0.9007, Val Acc = 0.8378, Loss = 0.3014
+2025-03-31 16:40:47,483 - INFO - Fold 4 validation accuracy: 0.8919
+2025-03-31 16:40:47,484 - INFO - 
+Fold 5/5
+2025-03-31 16:40:51,204 - INFO - Fold 5 - Epoch 20: Train Acc = 0.8411, Val Acc = 0.8919, Loss = 0.3787
+2025-03-31 16:40:54,464 - INFO - Fold 5 - Epoch 40: Train Acc = 0.8477, Val Acc = 0.8919, Loss = 0.3481
+2025-03-31 16:40:56,761 - INFO - Fold 5 validation accuracy: 0.8919
+2025-03-31 16:40:56,761 - INFO - 
+Cross-validation results:
+2025-03-31 16:40:56,761 - INFO - Mean accuracy: 0.8831 ± 0.0264
+2025-03-31 16:40:56,762 - INFO - 
+Final Results:
+2025-03-31 16:40:56,762 - INFO - original: 0.8984 ± 0.0405
+2025-03-31 16:40:56,762 - INFO - EGP: 0.8990 ± 0.0194
+2025-03-31 16:40:56,762 - INFO - CGP: 0.9201 ± 0.0380
+2025-03-31 16:40:56,762 - INFO - delaunay: 0.8831 ± 0.0264

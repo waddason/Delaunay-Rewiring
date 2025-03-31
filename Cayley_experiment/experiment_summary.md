@@ -2,33 +2,83 @@
 
 ## Experiment Setup
 - Dataset: MUTAG
-- Evaluation: 5 different splits (seeds: 42, 123, 456, 789, 101112)
+- Model: 4-layer GIN (hidden_dim=64)
+- Evaluation: Stratified 5-fold cross-validation
 - Methods compared: Original graph, EGP, CGP, Delaunay rewiring
-- UMAP Settings for Delaunay: 
-  - n_neighbors: 5
-  - min_dist: 0.1
-  - metric: Euclidean
-  - (Parameters selected through hyperparameter grid search)
+
+### Implementation Details
+1. Model Architecture:
+   - Graph Isomorphism Network (GIN)
+   - 4 layers with alternating edge types
+   - Hidden dimension: 64
+   - Dropout: 0.5
+   - Global mean pooling
+   - BatchNorm after each convolution
+
+2. Training:
+   - Adam optimizer (lr=0.001)
+   - ReduceLROnPlateau scheduler
+   - Batch size: 32
+   - Early stopping patience: 50
+   - Max epochs: 200
+
+3. Delaunay Transform:
+   - UMAP parameters:
+     - n_neighbors: 5
+     - min_dist: 0.1
+     - metric: euclidean
+     - n_components: 2
+   - QJ option for robust triangulation
+   - Small random noise for stability
+   - Undirected with self-loops
 
 ## Results
 
-### Accuracy
-1. **Delaunay**: 88.00% ± 2.45%
-1. **EGP**: 88.00% ± 4.00%
-2. **Original**: 84.00% ± 5.83%
-3. **CGP**: 83.00% ± 5.10%
+### Cross-validation Accuracy (5-fold)
+1. **CGP**: 92.01% ± 3.80%
+2. **EGP**: 89.90% ± 1.94%
+3. **Original**: 89.84% ± 4.05%
+4. **Delaunay**: 88.31% ± 2.64%
 
-### Training Speed
-| Method   | Convergence | Best Performance |
-|----------|-------------|------------------|
-| CGP      | 54.6 epochs | 9.6 epochs      |
-| Delaunay | 68.4 epochs | 18.8 epochs     |
-| Original | 78.4 epochs | 29.0 epochs     |
-| EGP      | 84.2 epochs | 37.2 epochs     |
+### Per-Method Analysis
+
+#### CGP (92.01% ± 3.80%)
+- Highest average accuracy
+- Individual fold accuracies: 92.11%, 89.47%, 97.37%, 86.49%, 94.59%
+- Best performance in fold 3 (97.37%)
+- Moderate variance across folds
+
+#### EGP (89.90% ± 1.94%)
+- Most stable performance (lowest std)
+- Individual fold accuracies: 89.47%, 86.84%, 92.11%, 89.19%, 91.89%
+- Consistent performance across folds
+- Low variance (±1.94%)
+
+#### Original (89.84% ± 4.05%)
+- Strong baseline performance
+- Individual fold accuracies: 92.11%, 92.11%, 94.74%, 86.49%, 83.78%
+- Highest variance among methods (±4.05%)
+- Performance drops in later folds
+
+#### Delaunay (88.31% ± 2.64%)
+- Individual fold accuracies: 86.84%, 92.11%, 84.21%, 89.19%, 89.19%
+- Moderate variance (±2.64%)
+- Most consistent in folds 4 and 5 (89.19%)
+- Lower but stable performance
 
 ## Key Findings
-- Delaunay with optimized UMAP parameters ties EGP for best accuracy (88.00%)
-- Delaunay shows most stable performance (lowest std: ±2.45%)
-- CGP achieves fastest convergence but lower accuracy
-- EGP matches Delaunay's accuracy but requires longer training
-- All rewiring methods improve stability over baseline
+1. Method Comparison:
+   - CGP achieves highest accuracy but moderate variance
+   - EGP provides best stability with good accuracy
+   - Original method surprisingly competitive but unstable
+   - Delaunay offers consistent but slightly lower performance
+
+2. Statistical Significance:
+   - All methods perform within ±4.05% standard deviation
+   - EGP shows remarkably low variance (±1.94%)
+   - Stratified k-fold helps reduce evaluation bias
+
+3. Training Dynamics:
+   - Early stopping typically triggers between 40-120 epochs
+   - Learning rate reduction helps stabilize training
+   - All methods benefit from patience in validation

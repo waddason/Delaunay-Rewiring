@@ -9,6 +9,7 @@ from torch_geometric.loader import DataLoader
 import numpy as np
 from collections import deque
 import warnings
+from sklearn.model_selection import StratifiedKFold
 warnings.filterwarnings('ignore')
 
 # Import our transforms
@@ -23,41 +24,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     stream=sys.stdout
 )
-
-def train_epoch(model, loader, optimizer, device):
-    model.train()
-    total_loss = 0
-    correct = 0
-    total = 0
-    
-    for data in loader:
-        optimizer.zero_grad()
-        data = data.to(device)
-        out = model(data)
-        loss = F.cross_entropy(out, data.y)
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item() * data.num_graphs
-        pred = out.argmax(dim=1)
-        correct += (pred == data.y).sum().item()
-        total += len(data.y)
-    
-    train_acc = correct / total
-    return total_loss / len(loader.dataset), train_acc
-
-def evaluate(model, loader, device):
-    model.eval()
-    correct = 0
-    total = 0
-    
-    with torch.no_grad():
-        for data in loader:
-            data = data.to(device)
-            pred = model(data).argmax(dim=1)
-            correct += (pred == data.y).sum().item()
-            total += len(data.y)
-    
-    return correct / total
 
 class GNN_node(torch.nn.Module):
     def __init__(self, num_features, hidden_dim, transform_name=None, is_cgp=False):
@@ -116,7 +82,6 @@ class GNN(torch.nn.Module):
     def forward(self, data):
         h_node = self.gnn_node(data)
         
-        # For CGP, use only real nodes
         if self.is_cgp:
             real_nodes_mask = ~data.virtual_node_mask
             h_node = h_node[real_nodes_mask]
@@ -127,93 +92,125 @@ class GNN(torch.nn.Module):
         h_graph = self.pool(h_node, batch)
         return self.classifier(h_graph)
 
-def train_evaluate_split(dataset, split_seed, params, device, method_name, is_cgp):
-    """Train and evaluate model on a single data split."""
-    torch.manual_seed(split_seed)  # Set seed for data split
+def train_epoch(model, loader, optimizer, device):
+    model.train()
+    total_loss = 0
+    correct = 0
+    total = 0
     
-    # Create splits
-    num_graphs = len(dataset)
-    indices = torch.randperm(num_graphs)
-    train_size = int(0.8 * num_graphs)
-    val_size = int(0.1 * num_graphs)
+    for data in loader:
+        optimizer.zero_grad()
+        data = data.to(device)
+        out = model(data)
+        loss = F.cross_entropy(out, data.y)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item() * data.num_graphs
+        pred = out.argmax(dim=1)
+        correct += (pred == data.y).sum().item()
+        total += len(data.y)
     
-    train_dataset = dataset[indices[:train_size]]
-    val_dataset = dataset[indices[train_size:train_size + val_size]]
-    test_dataset = dataset[indices[train_size + val_size:]]
+    return total_loss / len(loader.dataset), correct / total
+
+def evaluate(model, loader, device):
+    model.eval()
+    correct = 0
+    total = 0
     
-    train_loader = DataLoader(train_dataset, batch_size=params['batch_size'], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=params['batch_size'])
-    test_loader = DataLoader(test_dataset, batch_size=params['batch_size'])
+    with torch.no_grad():
+        for data in loader:
+            data = data.to(device)
+            pred = model(data).argmax(dim=1)
+            correct += (pred == data.y).sum().item()
+            total += len(data.y)
     
-    # Track metrics
-    all_metrics = {
-        'train_acc': [],
-        'val_acc': [],
-        'test_acc': [],
-        'train_loss': [],
-        'best_epoch': 0,
-        'convergence_epoch': 0
-    }
-    
-    model = GNN(
-        num_features=dataset.num_features,
-        hidden_dim=params['hidden_dim'],
-        num_classes=dataset.num_classes,
-        transform_name=method_name,
-        is_cgp=is_cgp
-    ).to(device)
-    
+    return correct / total
+
+def train_single_fold(model, train_loader, val_loader, params, device, fold):
     optimizer = torch.optim.Adam(model.parameters(), lr=params['learning_rate'])
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode='max', factor=0.5, patience=20, min_lr=1e-5
     )
     
     best_val_acc = 0
-    best_test_acc = 0
-    best_train_acc = 0
     patience_counter = 0
-    stable_val_acc = deque(maxlen=5)  # Track last 5 validation accuracies
+    
+    metrics = {
+        'train_acc': [],
+        'val_acc': [],
+        'train_loss': [],
+        'best_epoch': 0,
+        'convergence_epoch': 0
+    }
     
     for epoch in range(params['epochs']):
         # Training
         train_loss, train_acc = train_epoch(model, train_loader, optimizer, device)
         val_acc = evaluate(model, val_loader, device)
-        test_acc = evaluate(model, test_loader, device)
         
-        # Track metrics
-        all_metrics['train_acc'].append(train_acc)
-        all_metrics['val_acc'].append(val_acc)
-        all_metrics['test_acc'].append(test_acc)
-        all_metrics['train_loss'].append(train_loss)
+        metrics['train_acc'].append(train_acc)
+        metrics['val_acc'].append(val_acc)
+        metrics['train_loss'].append(train_loss)
         
         scheduler.step(val_acc)
-        stable_val_acc.append(val_acc)
         
-        # Update best metrics
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            best_test_acc = test_acc
-            best_train_acc = train_acc
-            all_metrics['best_epoch'] = epoch
+            metrics['best_epoch'] = epoch
             patience_counter = 0
         else:
             patience_counter += 1
-        
-        # Check convergence
-        if len(stable_val_acc) == 5 and np.std(stable_val_acc) < 0.01:
-            all_metrics['convergence_epoch'] = epoch
             
         if patience_counter >= 50:
+            metrics['convergence_epoch'] = epoch
             break
-        
+            
         if (epoch + 1) % 20 == 0:
-            logging.info(f"Split {split_seed} - Epoch {epoch+1}: Train Acc = {train_acc:.4f}, Val Acc = {val_acc:.4f}, Test Acc = {test_acc:.4f}, Loss = {train_loss:.4f}")
+            logging.info(f"Fold {fold} - Epoch {epoch+1}: Train Acc = {train_acc:.4f}, Val Acc = {val_acc:.4f}, Loss = {train_loss:.4f}")
     
-    all_metrics['final_train_acc'] = best_train_acc
-    all_metrics['final_val_acc'] = best_val_acc
-    all_metrics['final_test_acc'] = best_test_acc
+    return metrics, best_val_acc
+
+def k_fold_cross_validation(dataset, params, device, method_name, is_cgp, n_folds=5):
+    # Get labels for stratification
+    labels = torch.tensor([data.y.item() for data in dataset])
     
-    return all_metrics
+    # Initialize stratified k-fold
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+    
+    fold_results = []
+    
+    for fold, (train_idx, val_idx) in enumerate(skf.split(torch.zeros(len(dataset)), labels)):
+        logging.info(f"\nFold {fold+1}/{n_folds}")
+        
+        # Create data loaders for this fold
+        train_dataset = dataset[train_idx.tolist()]
+        val_dataset = dataset[val_idx.tolist()]
+        
+        train_loader = DataLoader(train_dataset, batch_size=params['batch_size'], shuffle=True)
+        val_loader = DataLoader(val_dataset, batch_size=params['batch_size'])
+        
+        # Initialize model
+        model = GNN(
+            num_features=dataset.num_features,
+            hidden_dim=params['hidden_dim'],
+            num_classes=dataset.num_classes,
+            transform_name=method_name,
+            is_cgp=is_cgp
+        ).to(device)
+        
+        # Train model
+        metrics, val_acc = train_single_fold(model, train_loader, val_loader, params, device, fold+1)
+        fold_results.append(val_acc)
+        
+        logging.info(f"Fold {fold+1} validation accuracy: {val_acc:.4f}")
+    
+    mean_acc = np.mean(fold_results)
+    std_acc = np.std(fold_results)
+    
+    logging.info(f"\nCross-validation results:")
+    logging.info(f"Mean accuracy: {mean_acc:.4f} ± {std_acc:.4f}")
+    
+    return mean_acc, std_acc
 
 def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -228,9 +225,6 @@ def main():
         'epochs': 200
     }
     
-    # Split seeds for different data partitions
-    split_seeds = [42, 123, 456, 789, 101112]  # Added more splits
-    
     # Load datasets with different transforms
     transforms = {
         'original': (NormalizeFeatures(), False),
@@ -240,13 +234,11 @@ def main():
     }
     
     results = {}
-    detailed_metrics = {}
     
     for method_name, (transform, is_cgp) in transforms.items():
         logging.info(f"\nRunning {method_name} experiment...")
         
         try:
-            # Load dataset
             dataset = TUDataset(
                 root=f'data/MUTAG-{method_name.lower()}', 
                 name='MUTAG',
@@ -256,32 +248,11 @@ def main():
             
             logging.info(f"Dataset loaded: {len(dataset)} graphs")
             
-            # Run on different splits
-            split_metrics = []
-            all_test_accs = []
+            mean_acc, std_acc = k_fold_cross_validation(
+                dataset, params, device, method_name, is_cgp
+            )
             
-            for split_seed in split_seeds:
-                logging.info(f"Split seed: {split_seed}")
-                metrics = train_evaluate_split(dataset, split_seed, params, device, method_name, is_cgp)
-                split_metrics.append(metrics)
-                all_test_accs.append(metrics['final_test_acc'])
-            
-            # Calculate aggregated metrics
-            mean_acc = np.mean(all_test_accs)
-            std_acc = np.std(all_test_accs)
             results[method_name] = (mean_acc, std_acc)
-            detailed_metrics[method_name] = {
-                'split_metrics': split_metrics,
-                'mean_convergence': np.mean([m['convergence_epoch'] for m in split_metrics]),
-                'mean_best_epoch': np.mean([m['best_epoch'] for m in split_metrics]),
-                'train_acc_curves': [m['train_acc'] for m in split_metrics],
-                'val_acc_curves': [m['val_acc'] for m in split_metrics],
-                'test_acc_curves': [m['test_acc'] for m in split_metrics]
-            }
-            
-            logging.info(f"{method_name} final: {mean_acc:.4f} ± {std_acc:.4f}")
-            logging.info(f"Average convergence epoch: {detailed_metrics[method_name]['mean_convergence']:.1f}")
-            logging.info(f"Average best epoch: {detailed_metrics[method_name]['mean_best_epoch']:.1f}")
             
         except Exception as e:
             logging.error(f"Error in {method_name} experiment: {str(e)}")
@@ -290,9 +261,6 @@ def main():
     logging.info("\nFinal Results:")
     for method_name, (mean, std) in results.items():
         logging.info(f"{method_name}: {mean:.4f} ± {std:.4f}")
-    
-    # Save detailed metrics
-    np.save('detailed_metrics.npy', detailed_metrics)
 
 if __name__ == "__main__":
     main()
