@@ -8,7 +8,7 @@ import warnings
 
 class DelaunayTransform(BaseTransform):
     """Transform applying Delaunay triangulation on UMAP-reduced node features."""
-    def __init__(self, dataset_name, n_neighbors=5, min_dist=0.25, metric='cosine'):
+    def __init__(self, dataset_name, n_neighbors=5, min_dist=0.1, metric='euclidean'):
         super().__init__()
         self.dataset = dataset_name
         # Using optimal parameters from hyperparameter study

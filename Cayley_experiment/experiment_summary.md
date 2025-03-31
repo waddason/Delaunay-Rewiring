@@ -4,25 +4,31 @@
 - Dataset: MUTAG
 - Evaluation: 5 different splits (seeds: 42, 123, 456, 789, 101112)
 - Methods compared: Original graph, EGP, CGP, Delaunay rewiring
+- UMAP Settings for Delaunay: 
+  - n_neighbors: 5
+  - min_dist: 0.1
+  - metric: Euclidean
+  - (Parameters selected through hyperparameter grid search)
 
 ## Results
 
 ### Accuracy
-1. **Delaunay**: 89.00% ± 5.83%
-2. **EGP**: 87.00% ± 4.00%
-3. **CGP**: 84.00% ± 5.83%
-4. **Original**: 82.00% ± 10.30%
+1. **Delaunay**: 88.00% ± 2.45%
+1. **EGP**: 88.00% ± 4.00%
+2. **Original**: 84.00% ± 5.83%
+3. **CGP**: 83.00% ± 5.10%
 
 ### Training Speed
 | Method   | Convergence | Best Performance |
 |----------|-------------|------------------|
-| Delaunay | 58.2 epochs | 8.2 epochs      |
-| CGP      | 62.2 epochs | 12.2 epochs     |
-| EGP      | 75.4 epochs | 28.2 epochs     |
-| Original | 76.6 epochs | 27.0 epochs     |
+| CGP      | 54.6 epochs | 9.6 epochs      |
+| Delaunay | 68.4 epochs | 18.8 epochs     |
+| Original | 78.4 epochs | 29.0 epochs     |
+| EGP      | 84.2 epochs | 37.2 epochs     |
 
 ## Key Findings
-- Delaunay rewiring achieves best performance and fastest convergence
-- EGP shows most stable performance (lowest std: ±4.00%)
-- Original method has highest variance (±10.30%)
-- All rewiring methods improve over baseline
+- Delaunay with optimized UMAP parameters ties EGP for best accuracy (88.00%)
+- Delaunay shows most stable performance (lowest std: ±2.45%)
+- CGP achieves fastest convergence but lower accuracy
+- EGP matches Delaunay's accuracy but requires longer training
+- All rewiring methods improve stability over baseline

@@ -1,18 +1,16 @@
 # Cayley Graph Experiment
 
-This directory contains the comparison between our Delaunay rewiring method and existing graph rewiring approaches (CGP, EGP).
+This directory contains the comparison between Delaunay rewiring (using UMAP with Euclidean metric) and existing graph rewiring approaches (CGP, EGP).
 
 ## Files
 - `experiment_summary.md`: Main results and findings
-- `final_results.txt`: Detailed experiment logs
-- Original implementation source files:
+- `final_results_euclidean.txt`: Detailed experiment logs
+- Implementation files:
   - `graph_classification.py`
   - `cayley_transform.py`
+  - `delaunay_transform.py`
 
 ## Results
-Delaunay rewiring consistently outperformed other methods, showing:
-- Higher accuracy: 89.00% ± 5.83%
-- Faster convergence: 58.2 epochs average
-- Earlier peak performance: 8.2 epochs average
-
-For full analysis see `experiment_summary.md`.
+- Delaunay rewiring and EGP both achieve 88.00% accuracy
+- Delaunay shows lowest variance (±2.45%)
+- More details in `experiment_summary.md`
